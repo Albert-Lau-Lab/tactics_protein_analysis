@@ -82,7 +82,9 @@ def get_similar_pdbs(pdb_id, chain_id):
     -------
     similar_pdbs : list
         A string containing PDBProt objects for each protein with at least 95% sequence
-        identity to pdb_id.  Note that pdb_id itself will have an entry.
+        identity to pdb_id.  Note that pdb_id itself will have an entry.  If the PDB ID
+        3ow6 would be included in similar_pdbs, it is removed.  This is because the
+        structure's MEX heteroatom causes Modeller to crash.
     """
 
     r = requests.get("https://www.rcsb.org/pdb/rest/sequenceCluster?cluster=95"
@@ -98,7 +100,8 @@ def get_similar_pdbs(pdb_id, chain_id):
         # code; I don't think that 2-letter chains are part of the official PDB
         # specification.  To make my code simple, I ignore these PDBs.
         if len(similar_pdb_chain) == 1:
-            similar_pdbs.append(PDBProt(similar_pdb_id, similar_pdb_chain))
+            if similar_pdb_id.lower() != "3ow6":
+                similar_pdbs.append(PDBProt(similar_pdb_id, similar_pdb_chain))
     return similar_pdbs
 
 def download_similar_pdbs(pdb_id, chain_id, fasta_download_dir, pdb_download_dir,

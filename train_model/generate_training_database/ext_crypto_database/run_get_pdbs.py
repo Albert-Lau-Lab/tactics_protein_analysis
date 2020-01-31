@@ -1,3 +1,6 @@
+"""This script should be used in step 1 of the procedure for extending the
+Cryptosite database."""
+
 import os
 import shutil
 import time
@@ -10,10 +13,10 @@ if os.path.isdir(output_dir):
     shutil.rmtree(output_dir)
 os.mkdir(output_dir)
 
-df_holo_prots = pd.read_csv("../gen_crypto_database/holo_pdb_and_chain.csv")
-for index, row in df_holo_prots.iterrows():
-    pdb_id = row["holo_pdb_id"].lower()
-    chain_id = row["holo_chain"]
+df_apo_prots = pd.read_csv("../gen_crypto_database/apo_pdb_and_chain.csv")
+for index, row in df_apo_prots.iterrows():
+    pdb_id = row["apo_pdb_id"].lower()
+    chain_id = row["apo_chain"]
     download_dir_fastas = "%s/%s_download_fastas" %(output_dir, pdb_id)
     download_dir_pdbs = "%s/%s_download_pdbs" %(output_dir, pdb_id)
     csv_loc = "%s/%s_similar_prots.csv" %(output_dir, pdb_id)
