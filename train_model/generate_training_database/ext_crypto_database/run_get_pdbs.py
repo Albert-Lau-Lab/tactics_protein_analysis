@@ -1,5 +1,5 @@
 """This script should be used in step 1 of the procedure for extending the
-Cryptosite database."""
+Cryptosite database.  If a timeout error occurs, run the script again."""
 
 import os
 import shutil

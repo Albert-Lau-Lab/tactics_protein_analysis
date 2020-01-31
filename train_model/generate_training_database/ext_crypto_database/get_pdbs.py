@@ -3,6 +3,7 @@ import shutil
 import xml.etree.ElementTree as ET
 
 import requests
+from requests.exceptions import ConnectionError
 
 
 class PDBProt:
@@ -45,9 +46,16 @@ class PDBProt:
         '''
 
         download_url = "https://files.rcsb.org/download/%s.pdb" %(self.pdb_id)
-        pdb_string = requests.get(download_url)
-        with open(loc, "w") as file_opened:
-            file_opened.write(pdb_string.text)
+        try:
+            pdb_string = requests.get(download_url, timeout=(9.05, 27))
+            with open(loc, "w") as file_opened:
+                file_opened.write(pdb_string.text)
+        except ConnectionError:
+            print("Retrying download after failure")
+            pdb_string = requests.get(download_url, timeout=(9.05, 27))
+            with open(loc, "w") as file_opened:
+                file_opened.write(pdb_string.text)
+
 
 
     def download_fasta_to_loc(self, loc):
@@ -63,9 +71,15 @@ class PDBProt:
         download_url = ("https://www.rcsb.org/pdb/download/downloadFastaFiles.do?"
                         "structureIdList=%s&compressionType=uncompressed"
                         %(self.pdb_id))
-        fasta_string = requests.get(download_url)
-        with open(loc, "w") as file_opened:
-            file_opened.write(fasta_string.text)
+        try:
+            fasta_string = requests.get(download_url, timeout=(9.05, 27))
+            with open(loc, "w") as file_opened:
+                file_opened.write(fasta_string.text)
+        except ConnectionError:
+            print("Retrying download after failure")
+            fasta_string = requests.get(download_url, timeout=(9.05, 27))
+            with open(loc, "w") as file_opened:
+                file_opened.write(fasta_string.text)
 
 
 def get_similar_pdbs(pdb_id, chain_id):

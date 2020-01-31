@@ -7,6 +7,7 @@
     are stored in one directory and the FASTAs are stored in the other.  It
     creates a CSV file listing the PDB ID and chain ID of each downloaded
     protein.
+        * If a timeout error occurs, run the script again.
 
 (2) Run the Python script run_check_pdb.py.  It determines which downloaded
     PDBs should be part of the ML database.  For a protein to be included, it
