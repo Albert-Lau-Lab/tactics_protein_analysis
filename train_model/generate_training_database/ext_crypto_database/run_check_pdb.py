@@ -112,15 +112,16 @@ for index, row in df_prots.iterrows():
             with open(good_list_loc, "r") as good_list:
                 for line in good_list.readlines():
                     if line.strip() != "pdb_id,chain_id" and line.strip() not in pdbs_in_a_good_list:
-                        pdbs_in_a_good_list.append(line)
+                        pdbs_in_a_good_list.append(line.strip())
             with open(bad_list_loc, "r") as bad_list:
                 for line in bad_list.readlines():
                     if line.strip() != "pdb_id,chain_id" and line.strip() not in pdbs_in_a_bad_list:
-                        pdbs_in_a_bad_list.append(line)
+                        pdbs_in_a_bad_list.append(line.strip())
         with open("extended_db/%s_good_similar_prots.csv" %(apo_pdb_id), "w") as final_good_list:
             final_good_list.write("pdb_id,chain_id\n")
             for pdb in pdbs_in_a_good_list:
-                if pdb not in pdbs_in_a_bad_list:
+                # The first condition gets rid of the newline at the end of files.
+                if (pdb.strip() != "") and (pdb not in pdbs_in_a_bad_list):
                     final_good_list.write("%s\n" %(pdb))
         with open("extended_db/%s_bad_similar_prots.csv" %(apo_pdb_id), "w") as final_bad_list:
             final_bad_list.write("pdb_id,chain_id\n")
