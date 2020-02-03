@@ -1,0 +1,13 @@
+REMARK  Name = NME
+REMARK  1 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  C_2
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  N   UNL     1       0.720   0.000  -0.067  0.00  0.00    -0.333 NA
+ATOM      2  H   UNL     1       1.105  -0.831   0.356  0.00  0.00    +0.118 HD
+ATOM      3  H   UNL     1       1.105   0.832   0.356  0.00  0.00    +0.118 HD
+ATOM      4  C   UNL     1      -0.747   0.000   0.011  0.00  0.00    +0.097 C 
+ENDROOT
+TORSDOF 0

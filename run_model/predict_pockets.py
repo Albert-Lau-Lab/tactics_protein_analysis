@@ -14,7 +14,8 @@ from change_b_factor_from_dict import change_b_factor_from_dict
 from cluster_trajectory import cluster_trajectory
 
 
-def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pdb_loc):
+def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pdb_loc,
+                    clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25):
     """Predict the locations of binding pockets in an MD trajectory.
 
     This is the function that is expected to be called by users.  It uses a novel algorithm
@@ -36,6 +37,18 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
     apo_pdb_loc : string
         The path to the PDB file of the "apo" structure before MD has started.  This is
         compared with the frames from the MD trajectory.
+    clust_max_dist : float, optional
+        The distance threshold (in Angstroms) to determine if a residue with a high ML
+        score should be included in a cluster of other high-scoring residues.  The default
+        value is 11.
+    ml_score_thresh : float, optional
+        The ML confidence score threshold for determining if a residue is "high-scoring".  It
+        must be between 0 and 1.  The default value is 0.8
+    ml_std_thresh : float, optional
+        The algorithm ignores residues that have high ML confidence scores in all frames.  It
+        does this by ignoring residues for which the standard deviation of the confidence scores
+        among MD snapshots is less than ml_std_thresh.  This number must be between 0 and 1.  The
+        default value is 0.25.
 
     Returns
     -------
@@ -86,32 +99,31 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
 
     # The goal is to find clusters of high-scoring residues that are near each other;
     # each cluster is a binding site. The clustering is iterative.  A residue should be
-    # added to a cluster if the residue is within min_dist of a residue in the cluster.
+    # added to a cluster if the residue is within clust_max_dist of a residue in the cluster.
     # The clusters may change between centroids, so the procedure must be done for each
     # centroid.  The procedure is:
     #     * For each high-scoring residue, create a list of other residues within
-    #       min_dist.
+    #       clust_max_dist.
     #     * Create a "distance matrix" of the "distances" between high-scoring residues.
     #       But instead of the actual distances, put 1 if the resisidues are within
-    #       min_dist, and put 25 (an arbitrary high number) otherwise.  This is
+    #       clust_max_dist, and put 25 (an arbitrary high number) otherwise.  This is
     #       confusing, but easier to code than a real residue-wise distance matrix.  It
     #       should have the same effect as the actual distance matrix would when it is
     #       passed to the clustering algorithm.
     #     * Use scikit-learn's AgglomerativeClustering to get the clusters.
     # The result is a set of clusters of high-scoring residues.  Each cluster is as big
-    # as possible without including a residue more than min_dist from another
+    # as possible without including a residue more than clust_max_dist from another
     # residue in the cluster.
 
     # Each key in nearby_residues_dict is a centroid index.  Each value is a dictionary of
     # the form {high-scoring_residue : [nearby_residues]}.  Note that not all nearby
     # residues are high-scoring.
     nearby_residues_dict = {}
-    min_dist = 11
     for residue, scores_for_this_residue in ml_scores_list.items():
         vals = np.array(list(scores_for_this_residue.values()))
         std = vals.std()
         for centroid, score in scores_for_this_residue.items():
-            if (score > 0.8) and (std > 0.25):
+            if (score > ml_score_thresh) and (std > ml_std_thresh):
                 # The next line looks unnecessary, but it is needed for MDAnalysis to
                 # be working on the correct frame.
                 centroid_frame = universe.trajectory[centroid]
@@ -122,7 +134,7 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
                 curr_chain_and_resnum_sel = "segid PRO%s and resnum %d" %(chain, resnum)
                 curr_chain_and_resnum = universe.select_atoms(curr_chain_and_resnum_sel)
                 nearby_residue_group = search_centroid.search(curr_chain_and_resnum,
-                                                              min_dist, "R")
+                                                              clust_max_dist, "R")
                 nearby_residue_list = []
                 for res in nearby_residue_group:
                     nearby_residue_list.append("%s:%s" %(res.resnum, res.segid[3]))
@@ -167,18 +179,16 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
                 # Set the distance to an arbitrary low number if the residues are close,
                 # to each other, or an arbitrary high number if they are far apart.
                 if other_residue in high_scoring_neighbors[residue]:
-                    to_be_added.append(1)
+                    to_be_added.append(max(0, clust_max_dist-10))
                 else:
-                    to_be_added.append(25)
+                    to_be_added.append(clust_max_dist+10)
             dist_mat.append(to_be_added)
             order.append(residue)
         dist_mat_array = np.asarray(dist_mat, dtype=np.int8)
         # If there is more than 1 high-scoring residue,  then use scikit's Agglomerative Clustering.
         # But it crashes if given only 1 point.
         if len(dist_mat_array) > 1:
-            # distance_threshold is an arbitrary number of intermediate magnitude,
-            # between 1 and 25.
-            clustering_object = AgglomerativeClustering(linkage="single", distance_threshold=10,
+            clustering_object = AgglomerativeClustering(linkage="single", distance_threshold=min_dist,
                                                         compute_full_tree=True,
                                                         affinity="precomputed", n_clusters=None)
             clustering_fit = clustering_object.fit(dist_mat_array)
@@ -259,7 +269,6 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
                             dock_scores_all_clusters[residue] = score
                     mean_score_pocket = tot_score_pocket / len(residues_in_cluster)
                     mean_score_all = tot_score_all / len(dock_scores.values())
-                    dock_score_cutoff = 5
                     with open(func_out_file_loc, "a") as func_out_file:
                         func_out_file.write("centroid: %d     cluster: %d\n\n" %(centroid, cluster))
                         func_out_file.write("selection string:\n%s\n\n" %(output_sele_string))
@@ -280,13 +289,10 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
                         for residue in residues_in_cluster:
                             func_out_file.write("%s " %(residue))
                         func_out_file.write("\n")
-                        is_pass = mean_score_pocket > dock_score_cutoff
                         print("residues_in_cluster", residues_in_cluster)
                         func_out_file.write("mean_score_pocket = %f     "
-                                            "mean_score_all = %f     "
-                                            "pass? %r\n\n\n\n\n" %(mean_score_pocket,
-                                                                   mean_score_all,
-                                                                   is_pass))
+                                            "mean_score_all = %f\n\n\n\n\n" %(mean_score_pocket,
+                                                                              mean_score_all))
                 else:
                     with open(func_out_file_loc, "a") as func_out_file:
                         func_out_file.write("centroid: %d     cluster: %d\n\n" %(centroid, cluster))
