@@ -12,3 +12,4 @@ run_model/input_data/*
 !run_model/input_data/.gitkeep
 run_model/output_data/*
 !run_model/output_data/.gitkeep
+*.swp
