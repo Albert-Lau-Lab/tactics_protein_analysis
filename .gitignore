@@ -9,4 +9,6 @@ train_model/ml/train_set_conc
 train_model/ml/__pycache__
 run_model/__pycache__
 run_model/input_data/*
+!run_model/input_data/.gitkeep
 run_model/output_data/*
+!run_model/output_data/.gitkeep
