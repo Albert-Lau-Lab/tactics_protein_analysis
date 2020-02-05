@@ -65,7 +65,7 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
     with open(func_out_file_loc, "w") as func_out_file:
         func_out_file.truncate()
 
-    universe, cluster_object = cluster_trajectory(psf_loc, dcd_loc, output_dir, num_clusters)
+    universe, cluster_object = cluster_trajectory(psf_loc, dcd_loc, output_dir, num_clusters, 0)
 
     # Initialization
     ml_scores_list = {}
@@ -179,16 +179,16 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
                 # Set the distance to an arbitrary low number if the residues are close,
                 # to each other, or an arbitrary high number if they are far apart.
                 if other_residue in high_scoring_neighbors[residue]:
-                    to_be_added.append(max(0, clust_max_dist-10))
+                    to_be_added.append(1)
                 else:
-                    to_be_added.append(clust_max_dist+10)
+                    to_be_added.append(20)
             dist_mat.append(to_be_added)
             order.append(residue)
         dist_mat_array = np.asarray(dist_mat, dtype=np.int8)
         # If there is more than 1 high-scoring residue,  then use scikit's Agglomerative Clustering.
         # But it crashes if given only 1 point.
         if len(dist_mat_array) > 1:
-            clustering_object = AgglomerativeClustering(linkage="single", distance_threshold=min_dist,
+            clustering_object = AgglomerativeClustering(linkage="single", distance_threshold=10,
                                                         compute_full_tree=True,
                                                         affinity="precomputed", n_clusters=None)
             clustering_fit = clustering_object.fit(dist_mat_array)
