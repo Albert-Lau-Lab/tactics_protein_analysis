@@ -325,13 +325,28 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
                                     "have any cryptic pockets.\n" %(centroid))
             mda_sele_string = "(resid %d and segid PRO%s)" %(resnum, chain)
             residues_in_cluster = [residue]
-    pymol_script_all_snaps_loc = "%s/display_all.pml" %(output_dir)
-    with open(pymol_script_all_snaps_loc, "w") as pymol_script_all_snaps_file:
-        pymol_script_all_snaps_file.write("from pymol.cgo import *\n")
-        pymol_script_all_snaps_file.write(pymol_load_snaps)
-        pymol_script_all_snaps_file.write("spectrum b\n"
+    # Write 2 pymol scripts.  One has a white background; the ML predictions are
+    # displayed in black.  The other has a black background; the ML predictions are
+    # displayed in white.
+    pymol_script_bg_white_loc = "%s/display_white_bg.pml" %(output_dir)
+    with open(pymol_script_bg_white_loc, "w") as pymol_script_bg_white_file:
+        pymol_script_bg_white_file.write("from pymol.cgo import *\n")
+        pymol_script_bg_white_file.write(pymol_load_snaps)
+        pymol_script_bg_white_file.write("spectrum b\n"
                                           "as cartoon\n"
                                           "cartoon putty\n")
-        pymol_script_all_snaps_file.write(pymol_show_resis)
-        pymol_script_all_snaps_file.write(all_cmd_str)
-        pymol_script_all_snaps_file.write("set stick_color, white\n")
+        pymol_script_bg_white_file.write(pymol_show_resis)
+        pymol_script_bg_white_file.write(all_cmd_str)
+        pymol_script_bg_white_file.write("set stick_color, black\n")
+        pymol_script_bg_black_file.write("set bg_rgb,[1,1,1]")
+
+    pymol_script_bg_black_loc = "%s/display_black_bg.pml" %(output_dir)
+    with open(pymol_script_bg_black_loc, "w") as pymol_script_bg_black_file:
+        pymol_script_bg_black_file.write("from pymol.cgo import *\n")
+        pymol_script_bg_black_file.write(pymol_load_snaps)
+        pymol_script_bg_black_file.write("spectrum b\n"
+                                          "as cartoon\n"
+                                          "cartoon putty\n")
+        pymol_script_bg_black_file.write(pymol_show_resis)
+        pymol_script_bg_black_file.write(all_cmd_str)
+        pymol_script_bg_black_file.write("set stick_color, white\n")
