@@ -338,7 +338,7 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
         pymol_script_bg_white_file.write(pymol_show_resis)
         pymol_script_bg_white_file.write(all_cmd_str)
         pymol_script_bg_white_file.write("set stick_color, black\n")
-        pymol_script_bg_black_file.write("set bg_rgb,[1,1,1]")
+        pymol_script_bg_white_file.write("set bg_rgb,[1,1,1]")
 
     pymol_script_bg_black_loc = "%s/display_black_bg.pml" %(output_dir)
     with open(pymol_script_bg_black_loc, "w") as pymol_script_bg_black_file:
