@@ -242,7 +242,9 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
                     for pair in [[fbl, fbr], [fbl, ftl], [fbr, ftr], [ftl, ftr],
                                  [bbl, bbr], [bbl, btl], [bbr, btr], [btl, btr],
                                  [fbl, bbl], [ftl, btl], [fbr, bbr], [ftr, btr]]:
-                        this_cmd_str += "VERTEX, %f, %f, %f, VERTEX, %f, %f, %f, " %(pair[0][0], pair[0][1], pair[0][2], pair[1][0], pair[1][1], pair[1][2])
+                        this_cmd_str += ("VERTEX, %f, %f, %f, VERTEX, "
+                                         "%f, %f, %f, " %(pair[0][0], pair[0][1], pair[0][2],
+                                                          pair[1][0], pair[1][1], pair[1][2]))
                     this_cmd_str += 'END], "%s_cluster_%s")\n' %(centroid, cluster)
                     all_cmd_str += this_cmd_str
                     prot_name = "centroid_%d_cluster_%d" %(centroid, cluster)
@@ -340,8 +342,8 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
         pymol_script_bg_white_file.write("from pymol.cgo import *\n")
         pymol_script_bg_white_file.write(pymol_load_snaps)
         pymol_script_bg_white_file.write("spectrum b\n"
-                                          "as cartoon\n"
-                                          "cartoon putty\n")
+                                         "as cartoon\n"
+                                         "cartoon putty\n")
         pymol_script_bg_white_file.write(pymol_show_resis)
         pymol_script_bg_white_file.write(all_cmd_str)
         pymol_script_bg_white_file.write("set stick_color, black\n")

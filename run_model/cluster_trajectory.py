@@ -43,12 +43,8 @@ def cluster_trajectory(psf_loc, dcd_loc, output_dir, num_clusters, seed=None):
     # Use KMeans to cluster the trajectory.  The clustering is used to choose which
     # frames of the trajectory are analyzed.
     universe = MDAnalysis.Universe(psf_loc, dcd_loc)
-    kmeans = clustering.ClusteringMethod.KMeans(num_clusters)
-    if seed is None:
-        cluster_object = clustering.cluster.cluster(universe, method=kmeans)
-    else:
-        cluster_object = clustering.cluster.cluster(universe, method=kmeans,
-                                                    random_state=seed)
+    kmeans = clustering.ClusteringMethod.KMeans(num_clusters, random_state=seed)
+    cluster_object = clustering.cluster.cluster(universe, method=kmeans)
 
     # Iterate over the centroid of each cluster of MD frames.  In each iteration,
     # do the following:

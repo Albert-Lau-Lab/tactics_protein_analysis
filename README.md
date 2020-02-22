@@ -57,3 +57,6 @@ First, change the working directory to whatever was passed as `output_dir`.  The
      * If the sticks and the high b-factors are in different areas, then fragment docking didn't support the ML prediction.  This means the prediction is probably incorrect; there is probably no pocket.
  * It may be useful to load `centroid_<cluster_num>.pdb` and display it as a cartoon.  This will make it easier to determine where in the protein each predicted pocket is.
  * Repeat the process for each cluster centroid.
+
+#### Debugging
+If the computer runs out of RAM, it may stop running the code and give the error message `Killed`.  If this happens, reduce the size of the input file or free up more RAM.
