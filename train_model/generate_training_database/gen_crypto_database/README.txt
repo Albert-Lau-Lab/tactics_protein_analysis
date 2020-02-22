@@ -3,19 +3,24 @@
 (1) Copy the list of apo PDB IDs on page 25 of the Cryptosite paper's
     supplemental information.  Paste the list into a blank document named
     apo_ids_unformatted.txt.  Add the apo PDBs on page 29 of the Cryptosite
-    paper's supplement to this list.  The file should have 93 lines.
+    paper's supplement to this list.  Remove 1MY1 and 1MY0 from the list because the
+    AMPA receptor was excluded from the database.  The file should have 91
+    lines.
 
 (2) Copy the holo PDB IDs from pages 25 and 29 of the Cryptosite paper's
     supplement.  Paste them into a blank document named
-    holo_ids_unformatted.txt.  One of the lines will be "2BRLA/3FQKB".
-    Reformat this so that 3FQKB is on the line below 2BRLA.  Delete the slash.
-    The file should have 94 lines.
+    holo_ids_unformatted.txt.  Make the following changes:
+        * One of the lines will be "2BRLA/3FQKB".  Reformat this so that 3FQKB
+          is on the line below 2BRLA.  Delete the slash.
+        * Remove 1FTL and 1N0T (AMPA receptor).
+    The file should have 92 lines.
 
 (3) Create a blank document named ligands.csv.  Add a line with the word
     ligand.  Copy the ligand names from pages 25 and 29 of the Cryptosite
     paper's supplement.  Paste them into ligands.csv.  Reformat so that each
-    ligand has its own line and there are no slashes.  There should be 99
-    lines (including the header).
+    ligand has its own line and there are no slashes.  Remove line 20 (DNQ)
+    and 87 (AT1) because they are the AMPA receptor's ligands.  There should be 97 lines
+    (including the header).
         * IMPORTANT: The order of the list matters.  For example, the line
           "ATP/FDP/OXL" should be reformatted so that OXL is below FDP which
           is below ATP.
@@ -88,8 +93,8 @@
           1JWP,A,1PZO,A,CBT, 300,A, 130  216  217  220  235  236  237  244  245  246  263  276  279  221 224 225 250 261 280  283  284  286,22
               REASON: Similar to 2NBQ, there are 2 ligands near each other.
               Combining the sites gives the correct number of residues.
-     When the file is corrected, it should have 99 lines.  The first line is a
-     header; there are 98 cryptic sites.  This should be the same size as the
+     When the file is corrected, it should have 97 lines.  The first line is a
+     header; there are 96 cryptic sites.  This should be one smaller than the
      database described in the Cryptosite paper.  The way that the paper
      counted sites merits some explantion.
          * The paper mentions a database of 84 cryptic sites.  This is the
@@ -112,7 +117,7 @@
            2IYT,A,2IYQ,A,ADP/SKM, 202/201,A/A,10 11 12 13 14 15 16 17 18 110 117 150 153 154 155 158 34 45 49 57 58 61 79 80 81 116 118 119 132 136,30
          * Delete all 3 lines for 1PKL/3HQP and replace with the following:
            1PKL,B,3HQP,P,ATP/FDP/OXL,1001/700/510,P/P/P,26 27 28 29 49 51 53 54 55 59 60 83 90 145 174 175 176 211 238 240 264 296 330 331 334 335 399 400 401 402 403 404 405 453 456 479 480 481 485 486 487 488 489 259 261 262 263 295,48
-     There should be 95 lines in cryptic_site_locations.csv after these edits.
+     There should be 93 lines in cryptic_site_locations.csv after these edits.
 (12) Run match_numbering.py.  It creates the directory
      apo_holo_numbering_dicts.  The directory contains a json file for each
      apo/holo pair of proteins.  Each json file can be read into a Python

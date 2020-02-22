@@ -8,7 +8,8 @@ import math
 from get_list_of_segids import get_list_of_segids
 
 
-def get_dock_score(prot_name, pdb_file_loc, output_dir, segid, center=None, size=None):
+def get_dock_score(prot_name, pdb_file_loc, output_dir, segid, center=None, size=None,
+                   extra_space=8):
     """Get each residue's dock using the ConCavity algorithm.
 
     The script creates output_dir, or overwrites it if it already exists.
@@ -30,12 +31,18 @@ def get_dock_score(prot_name, pdb_file_loc, output_dir, segid, center=None, size
         Whether the chain info is stored in the Segid column (instead of in
         the Chain column).  If True, then the function will create a reformatted
         PDB file with the chain listed in the Chain column.
-    center : list of floats of format [x_coord, y_coord, z_coord]
+    center : list of floats of format [x_coord, y_coord, z_coord], optional
         If specified, then the docking will be confined to an area centered around
         center.  If center is given, then size should also be given.
-    size : list of floats of format [x_size, y_size, z_size]
+    size : list of floats of format [x_size, y_size, z_size], optional
         If specified, then the docking will be confined to an area of this size.
         If size is given, then center should also be given.
+    extra_space : float, optional
+        The space (in Angstroms) added to each side of the predicted site when
+        determining the region to perform docking in.  If this value is too big, then
+        AutoDock Vina won't adequately sample all possible poses.  If the value is too small,
+        then the fragments will be trapped in the pocket and the dock scores will be inaccurately
+        high.  The default value is 8.
 
     Returns
     -------
@@ -129,7 +136,6 @@ def get_dock_score(prot_name, pdb_file_loc, output_dir, segid, center=None, size
             original_ligand_pdbqt_loc = "ligands/%s_ideal.pdbqt" %(ligand_name)
             ligand_pdbqt_loc = "%s/%s_ideal.pdbqt" %(output_dir, ligand_name)
             shutil.copyfile(original_ligand_pdbqt_loc, ligand_pdbqt_loc)
-            extra_space = 8 # added to each side of box for docking.
             if size is None:
                 size_x = max_coords[0] - min_coords[0] + extra_space
                 size_y = max_coords[1] - min_coords[1] + extra_space

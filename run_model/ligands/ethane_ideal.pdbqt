@@ -1,11 +1,10 @@
-REMARK  Name = ethane
-REMARK  1 active torsions:
+REMARK  Name = ethane.pdb
+REMARK  0 active torsions:
 REMARK  status: ('A' for Active; 'I' for Inactive)
-REMARK    1  A    between atoms: C_1  and  C_2
 REMARK                            x       y       z     vdW  Elec       q    Type
 REMARK                         _______ _______ _______ _____ _____    ______ ____
 ROOT
-ATOM      1  C   UNL     1      -0.756   0.000   0.000  0.00  0.00    +0.000 C 
-ATOM      2  C   UNL     1       0.756   0.000   0.000  0.00  0.00    +0.000 C 
+ATOM      1  C   UNL     1       1.540   0.000   0.000  0.00  0.00    +0.000 C 
+ATOM      2  C   UNL     1       0.000   0.000   0.000  0.00  0.00    +0.000 C 
 ENDROOT
 TORSDOF 0

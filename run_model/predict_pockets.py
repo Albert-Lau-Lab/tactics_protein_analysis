@@ -15,7 +15,8 @@ from cluster_trajectory import cluster_trajectory
 
 
 def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pdb_loc,
-                    clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25):
+                    clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25,
+                    dock_extra_space=8):
     """Predict the locations of binding pockets in an MD trajectory.
 
     This is the function that is expected to be called by users.  It uses a novel algorithm
@@ -49,6 +50,12 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
         does this by ignoring residues for which the standard deviation of the confidence scores
         among MD snapshots is less than ml_std_thresh.  This number must be between 0 and 1.  The
         default value is 0.25.
+    dock_extra_space : float, optional
+        The space (in Angstroms) added to each side of the predicted site when
+        determining the region to perform docking in.  If this value is too big, then
+        AutoDock Vina won't adequately sample all possible poses.  If the value is too small,
+        then the fragments will be trapped in the pocket and the dock scores will be inaccurately
+        high.  The default value is 8.
 
     Returns
     -------
@@ -244,8 +251,8 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
                                                                          centroid,
                                                                          cluster)
                     dock_scores = get_dock_score(prot_name, centroid_pdb_loc,
-                                                 output_dir_dock, True, center, size)
-                    print(dock_scores)
+                                                 output_dir_dock, True, center, size,
+                                                 dock_extra_space)
 
 
                     # Use the dock scores to assess the druggability of the predicted

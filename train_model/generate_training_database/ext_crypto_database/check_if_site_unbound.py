@@ -72,14 +72,14 @@ def check_if_site_unbound(pdb_of_interest_loc, pdb_of_interest_chain_id,
     ref_site_sel_string = "reference and chain %s and resi " %(ref_chain_id)
     for ref_site_res in ref_extended_site:
         if ref_site_res in ref_pdb_to_int_pdb_dict: # See above for explanation.
-            ref_site_sel_string += "+%s" %(ref_site_res)
+            ref_site_sel_string += "%s+" %(ref_site_res)
     ref_site_sel_string = ref_site_sel_string[:-1] # Remove the trailing + symbol.
     pymol.cmd.select("ref_extended_site", ref_site_sel_string)
 
     # Select the binding-site residues in the pdb_of_interest.
     int_site_sel_string = "interest and chain %s and resi " %(pdb_of_interest_chain_id)
     for int_site_res in int_extended_site:
-        int_site_sel_string += "+%s" %(int_site_res)
+        int_site_sel_string += "%s+" %(int_site_res)
     int_site_sel_string = int_site_sel_string[:-1] # Remove the trailing + symbol.
     pymol.cmd.select("int_extended_site", int_site_sel_string)
 

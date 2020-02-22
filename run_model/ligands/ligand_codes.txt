@@ -1,0 +1,20 @@
+Long name		pdb code		ftmap code		ligand source
+ethane			N/A			ETH			https://www.rcsb.org/pdb/ligand/chemAdvSearch.do
+									I entered the SMILES string "CC" and saved the molecule.  Then I deleted the last
+                                                                        2 characters from each carbon line because OpenBabel didn't like them.  Note the lack of hydrogens
+                                                                        in the pdb file; AutoDock Vina only uses polar hydrogens so this isn't a problem.
+ethanol			EOH			EOL			PDB
+isopropanol		IPA			THS                     PDB
+tert-butyl alcohol	TBU			BUT                     PDB
+acetonitrile		CCN			ACN                     PDB
+methanamine		NME			AMN                     PDB
+N,N-dimethylformamide	DMF			DFO                     PDB
+Dimethyl ether		2F2			DME                     PDB
+Benzaldehyde		HBX			BDY                     PDB
+Benzene			BNZ			BEN                     PDB
+Cyclohexane		CHX			CHX                     PDB
+Phenol			IPH			PHN                     PDB
+Acetamide		ACM			ACD                     PDB
+Acetone			ACN			ACT                     PDB
+Acetaldehyde		ACE			ADY                     PDB
+Urea			URE			URE                     PDB

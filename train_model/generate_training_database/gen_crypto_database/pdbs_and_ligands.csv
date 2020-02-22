@@ -17,7 +17,6 @@ apo_pdb_id,apo_chain,holo_pdb_id,holo_chain,ligand_id
 1G4E,B,1G67,B,POP
 1G4E,B,1G67,B,TZP
 3F74,C,3BQM,C,BQM
-1MY1,C,1FTL,A,DNQ
 2WGQ,B,1D6Y,B,HY1
 1DUB,D,1EY3,F,DAK
 1PZT,A,1PZY,D,UDP
@@ -84,7 +83,6 @@ apo_pdb_id,apo_chain,holo_pdb_id,holo_chain,ligand_id
 1SU4,A,3FGO,B,ACP
 2AIR,H,1ZA1,D,CTP
 1E2X,A,1H9G,A,MYR
-1MY0,B,1N0T,D,AT1
 1ZAH,B,2OT1,D,N3P
 4HB2,C,4HAT,C,LMB
 1BSQ,A,1GX8,A,RTL
