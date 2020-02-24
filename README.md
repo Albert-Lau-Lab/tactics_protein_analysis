@@ -53,6 +53,7 @@ First, change the working directory to whatever was passed as `output_dir`.  The
  * Display a single cluster, and the boxes for it.
  * Examine the box size.  If the box is too big, then the fragment docking will be inaccurate.  If the box is no bigger than a typical protein domain, then the docking should work.
      * If a box is too big, this means that the algorithm can't work on that part of the structure.  Ignore that area; hopefully the issue isn't present in all snapshots.
+     * Occasionally, a small box will be partially or entirely within a larger box.  The overlap may impact the reliability of the dock scores; this should be considered when interpreting the code's output in this situation.
  * Examine the sticks (ML predictions) and b-factor putty (fragment docking).  Ideally, the residues with sticks should also have high b-factors.  This means that the ML prediction and docking agree.
      * If the sticks and the high b-factors are in different areas, then fragment docking didn't support the ML prediction.  This means the prediction is probably incorrect; there is probably no pocket.
  * It may be useful to load `centroid_<cluster_num>.pdb` and display it as a cartoon.  This will make it easier to determine where in the protein each predicted pocket is.
