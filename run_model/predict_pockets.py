@@ -47,7 +47,11 @@ def predict_pockets(output_dir, num_clusters, run_name, apo_pdb_loc, psf_loc=Non
         universe must not be None
     universe : MDAnalysis universe, optional
         An MDAnlysis universe with the protein conformational ensemble (ex. MD trajectory).
-        If universe is None, then psf_loc and dcd_loc must not be None.
+        If universe is None, then psf_loc and dcd_loc must not be None.  The code re-opens the
+        file(s) in the universe.  So when the universe is initialized, the file paths must be
+        specific enough that the code can find the files from the predict_pockets function call.
+        Additionally, the universe's input structures must have segids of the form PROA, PROB,
+        etc. where A,B are the same as the chain label.
     ml_score_thresh : float, optional
         The ML confidence score threshold for determining if a residue is "high-scoring".  It
         must be between 0 and 1.  The default value is 0.8
