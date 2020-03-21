@@ -6,7 +6,7 @@ from MDAnalysis.analysis.encore import clustering
 from get_list_of_segids import get_list_of_segids
 
 
-def cluster_trajectory(psf_loc, dcd_loc, output_dir, num_clusters, seed=None):
+def cluster_trajectory(output_dir, num_clusters, psf_loc=None, dcd_loc=None, universe=None, seed=None):
     """Cluster an MD trajectory, and create a PDB file for each cluster.
 
     The script uses MDAnalysis to cluster the trajectory.  It writes a PDB
@@ -18,17 +18,22 @@ def cluster_trajectory(psf_loc, dcd_loc, output_dir, num_clusters, seed=None):
 
     Parameters
     ----------
-    psf_loc : string
-        The path to the psf file.
-    dcd_loc : string
-        The path to the dcd loc.
     output_dir : string
         The name of the directory where the output is stored.  This directory
         should already exist.  Any existing contents will NOT be deleted, but
         they may be overwritten.
     num_clusters : int
         The number of clusters to create
-    seed : int
+    psf_loc : string, optional
+        The path to the psf file.  If psf_loc is None, then dcd_loc must be None and
+        universe must not be None
+    dcd_loc : string, optional
+        The path to the dcd loc.   If dcd_loc is None, then psf_loc must be None and
+        universe must not be None
+    universe : MDAnalysis universe, optional
+        An MDAnlysis universe with the protein conformational ensemble (ex. MD trajectory).
+        If universe is None, then psf_loc and dcd_loc must not be None.
+    seed : int, optional
         The seed to use for MDAnalysis's clustering.
 
     Returns
@@ -42,7 +47,8 @@ def cluster_trajectory(psf_loc, dcd_loc, output_dir, num_clusters, seed=None):
 
     # Use KMeans to cluster the trajectory.  The clustering is used to choose which
     # frames of the trajectory are analyzed.
-    universe = MDAnalysis.Universe(psf_loc, dcd_loc)
+    if universe is None:
+        universe = MDAnalysis.Universe(psf_loc, dcd_loc)
     kmeans = clustering.ClusteringMethod.KMeans(num_clusters, random_state=seed)
     cluster_object = clustering.cluster.cluster(universe, method=kmeans)
 

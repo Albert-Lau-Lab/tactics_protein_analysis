@@ -14,7 +14,8 @@ from change_b_factor_from_dict import change_b_factor_from_dict
 from cluster_trajectory import cluster_trajectory
 
 
-def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pdb_loc,
+def predict_pockets(output_dir, num_clusters, run_name, apo_pdb_loc, psf_loc=None,
+                    dcd_loc=None, universe=None,
                     clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25,
                     dock_extra_space=8):
     """Predict the locations of binding pockets in an MD trajectory.
@@ -24,10 +25,6 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
 
     Parameters
     ----------
-    psf_loc : string
-        The path to the psf file.
-    dcd_loc : string
-        The path to the dcd loc.
     output_dir : string
         The name of the directory where the output is stored.
         If the directory already exists, its contents will be overwritten.
@@ -42,6 +39,15 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
         The distance threshold (in Angstroms) to determine if a residue with a high ML
         score should be included in a cluster of other high-scoring residues.  The default
         value is 11.
+    psf_loc : string, optional
+        The path to the psf file.  If psf_loc is None, then dcd_loc must be None and
+        universe must not be None
+    dcd_loc : string, optional
+        The path to the dcd loc.   If dcd_loc is None, then psf_loc must be None and
+        universe must not be None
+    universe : MDAnalysis universe, optional
+        An MDAnlysis universe with the protein conformational ensemble (ex. MD trajectory).
+        If universe is None, then psf_loc and dcd_loc must not be None.
     ml_score_thresh : float, optional
         The ML confidence score threshold for determining if a residue is "high-scoring".  It
         must be between 0 and 1.  The default value is 0.8
@@ -72,7 +78,12 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
     with open(func_out_file_loc, "w") as func_out_file:
         func_out_file.truncate()
 
-    universe, cluster_object = cluster_trajectory(psf_loc, dcd_loc, output_dir, num_clusters, 0)
+    if universe is None:
+        universe, cluster_object = cluster_trajectory(output_dir, num_clusters, psf_loc=psf_loc,
+                                                      dcd_loc=dcd_loc, seed=0)
+    else:
+        universe, cluster_object = cluster_trajectory(output_dir, num_clusters, universe=universe,
+                                                      seed=0)
 
     # Initialization
     ml_scores_list = {}
@@ -280,32 +291,23 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
                     mean_score_all = tot_score_all / len(dock_scores.values())
                     with open(func_out_file_loc, "a") as func_out_file:
                         func_out_file.write("centroid: %d     cluster: %d\n\n" %(centroid, cluster))
-                        func_out_file.write("selection string:\n%s\n\n" %(output_sele_string))
-                        # Print the dock scores, sorted from highest to lowest.  Start
-                        # by creating a list of tuples (score, residue) sorted by score.
-                        # Then create another list of tuples (residue, score).
-                        scores_sort_rev = sorted(((score, res) for res, score in
-                                                  dock_scores.items()), reverse=True)
-                        scores_str = ""
-                        for item in scores_sort_rev:
-                            scores_str += "%s %s\t" %(item[1], item[0])
-                        #scores_sort = [(entry[1], entry[0]) for entry in scores_sort_rev]
-                        func_out_file.write(scores_str)
-                        print(scores_str)
-                        dict_for_out = {"dock_scores" : dock_scores}
-                        func_out_file.write(json.dumps(dict_for_out))
-                        func_out_file.write("\n")
-                        for residue in residues_in_cluster:
-                            func_out_file.write("%s " %(residue))
-                        func_out_file.write("\n")
-                        print("residues_in_cluster", residues_in_cluster)
-                        func_out_file.write("mean_score_pocket = %f     "
-                                            "mean_score_all = %f\n\n\n\n\n" %(mean_score_pocket,
-                                                                              mean_score_all))
+                        func_out_file.write("docking box center: %f, %f, %f\n\n" %(center[0],
+                                                                                   center[1],
+                                                                                   center[2]))
+                        func_out_file.write("docking box dimensions: %f, %f, %f\n\n" %(size[0],
+                                                                                       size[1],
+                                                                                       size[2]))
+                        func_out_file.write("selection string  for residues found by ML (not "
+                                            "docking):\n%s\n\n" %(output_sele_string))
+                        func_out_file.write("Mean Dock Score of Residues Selected By ML = %f\n"
+                                            "Mean Dock Score of All Residues With Nonzero Dock "
+                                            "Scores = %f\n\n\n\n\n" %(mean_score_pocket,
+                                                                      mean_score_all))
                 else:
                     with open(func_out_file_loc, "a") as func_out_file:
                         func_out_file.write("centroid: %d     cluster: %d\n\n" %(centroid, cluster))
-                        func_out_file.write("selection string:\n%s\n" %(output_sele_string))
+                        func_out_file.write("PyMOL selection string for residue found by ML "
+                                            "(not docking):\n%s\n" %(output_sele_string))
                         func_out_file.write("This cluster has only 1 residue.  It "
                                             "may not be a real binding site.\n\n\n\n\n")
                         print("This cluster has only 1 residue.  It "
@@ -354,8 +356,8 @@ def predict_pockets(psf_loc, dcd_loc, output_dir, num_clusters, run_name, apo_pd
         pymol_script_bg_black_file.write("from pymol.cgo import *\n")
         pymol_script_bg_black_file.write(pymol_load_snaps)
         pymol_script_bg_black_file.write("spectrum b\n"
-                                          "as cartoon\n"
-                                          "cartoon putty\n")
+                                         "as cartoon\n"
+                                         "cartoon putty\n")
         pymol_script_bg_black_file.write(pymol_show_resis)
         pymol_script_bg_black_file.write(all_cmd_str)
         pymol_script_bg_black_file.write("set stick_color, white\n")
