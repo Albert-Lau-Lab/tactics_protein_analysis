@@ -1,4 +1,4 @@
-# Pocket Finder Code
+# CAPSTICS Pocket Finder Code
 This code finds the locations of possible cryptic pockets within MD trajectories.
 
 ## Usage
@@ -17,11 +17,11 @@ wherever `output_dir` is.
 Here is the order of arguments to `predict_pockets`:
 
 ```
-predict_pockets(psf_loc, dcd_loc, output_dir, 
-                num_clusters, run_name, apo_pdb_loc,
+predict_pockets(output_dir, num_clusters, run_name, apo_pdb_loc,
+                psf_loc=None, dcd_loc=None, universe=None,
                 clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25)
 ```
-Here is an explanation of each argument:
+Here is an explanation of each argument.  Note that either `universe` or both `psf_loc` and `dcd_loc` must be specified.
 
  * `psf_loc` : string.  The path to the MD trajectory's PSF file.
  * `dcd_loc` : string.  The path to the MD trajectory's DCD file.
@@ -29,6 +29,9 @@ Here is an explanation of each argument:
  * `num_clusters` : int.  The number of clusters of the MD trajectory to create and analyze.
  * `run_name` : string.  The name of this function call.  It should probably be similar to output_dir.
  * `apo_pdb_loc` : string.  The path to the PDB file of the "apo" structure before MD has started.  This is compared with the frames from the MD trajectory.
+ * `psf_loc` : string, optional.  The path to the MD trajectory's PSF file.   If `psf_loc` is `None`, then `dcd_loc` must be `None` and `universe` must not be `None`.
+ * `dcd_loc` : string, optional.  The path to the MD trajectory's DCD file.  If `dcd_loc` is `None`, then `psf_loc` must be `None` and `universe` must not be `None`.
+ * `universe` : MDAnalysis universe, optional.  An MDAnlysis universe with the protein conformational ensemble (ex. MD trajectory).  If `universe` is `None`, then `psf_loc` and `dcd_loc` must not be `None`.
  * `clust_max_dist` : float, optional.  The distance threshold (in Angstroms) to determine if a residue with a high ML score should be included in a cluster of other high-scoring residues.  The default value is 11.
  * `ml_score_thresh` : float, optional.  The ML confidence score threshold for determining if a residue is "high-scoring".  It must be between 0 and 1.  The default value is 0.8
  * `ml_std_thresh` : float, optional.  The algorithm ignores residues that have high ML confidence scores in all frames.  It does this by ignoring residues for which the standard deviation of the confidence scores among MD snapshots is less than ml_std_thresh.  This number must be between 0 and 1.  The default value is 0.25.
