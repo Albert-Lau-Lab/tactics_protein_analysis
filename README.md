@@ -5,7 +5,7 @@ This code finds the locations of possible cryptic pockets within MD trajectories
 #### Locations of the Code
 The directory `train_model` includes the code that was used to train the ML model.  It is expected that most software users will not need to run the code in this directory.
 
-The durectory `run_model` contains the code to run the model.   ***Users should run the code while `run_model` is the working directory.***
+The directory `run_model` contains the code to run the model.   ***Users should run the code while `run_model` is the working directory.***
 
 #### How to Run the Code
 
@@ -31,7 +31,7 @@ Here is an explanation of each argument.  Note that either `universe` or both `p
  * `apo_pdb_loc` : string.  The path to the PDB file of the "apo" structure before MD has started.  This is compared with the frames from the MD trajectory.
  * `psf_loc` : string, optional.  The path to the MD trajectory's PSF file.   If `psf_loc` is `None`, then `dcd_loc` must be `None` and `universe` must not be `None`.
  * `dcd_loc` : string, optional.  The path to the MD trajectory's DCD file.  If `dcd_loc` is `None`, then `psf_loc` must be `None` and `universe` must not be `None`.
- * `universe` : MDAnalysis universe, optional.  An MDAnlysis universe with the protein conformational ensemble (ex. MD trajectory).  If `universe` is `None`, then `psf_loc` and `dcd_loc` must not be `None`.  The code re-opens the file(s) in the universe.  So when the universe is initialized, the file paths must be specific enough that the code can find the files from the predict_pockets function call.  Additionally, the universe's input structures must have segids of the form PROA, PROB, etc. where A,B are the same as the chain label.
+ * `universe` : MDAnalysis universe, optional.  An MDAnlysis universe with the protein conformational ensemble (ex. MD trajectory).  If `universe` is `None`, then `psf_loc` and `dcd_loc` must not be `None`.  The code re-opens the file(s) in the universe.  So when the universe is initialized, the file paths must be specific enough that the code can find the files from the predict_pockets function call.  Additionally, the universe's input structures must have segids of the form PROA, PROB, etc. where A,B act as the chain label.
  * `clust_max_dist` : float, optional.  The distance threshold (in Angstroms) to determine if a residue with a high ML score should be included in a cluster of other high-scoring residues.  The default value is 11.
  * `ml_score_thresh` : float, optional.  The ML confidence score threshold for determining if a residue is "high-scoring".  It must be between 0 and 1.  The default value is 0.8
  * `ml_std_thresh` : float, optional.  The algorithm ignores residues that have high ML confidence scores in all frames.  It does this by ignoring residues for which the standard deviation of the confidence scores among MD snapshots is less than ml_std_thresh.  This number must be between 0 and 1.  The default value is 0.25.
@@ -64,3 +64,7 @@ First, change the working directory to whatever was passed as `output_dir`.  The
 
 #### Debugging
 If the computer runs out of RAM, it may stop running the code and give the error message `Killed`.  If this happens, reduce the size of the input file or free up more RAM.
+
+If the code predicts numerous pockets but each pocket only has one residue, then the segids of the input may be wrong.  They must be of the form `PROA`, `PROB`, etc.
+
+If the code predicts no pockets, then `ml_score_thresh` and `ml_std_thresh` may be too high.
