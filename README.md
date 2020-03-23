@@ -48,7 +48,7 @@ Here is an explanation of each argument.  Note that either `universe` or both `p
     * The boxes show the boundaries for the fragment dock calculations.  They are slightly larger than the predicted binding sites.
   * `display_white_bg.pml` is similar to `display_black_bg.pml`, except that the ML predictions are shown in black and the background is white.  The white background is often more suitable for making publication images than the black background.
   * Each cluster's structure is written to the file `centroid_<cluster_num>.pdb` where `<cluster_num>` is the number of the cluster.
-  
+  * `<run_name>_output.txt` lists each predicted site.  It records the center and size of each docking box (from when Autodock Vina was run within the algorithm), this can be used as an approximate quantification of the site's location.
 #### How Can the Output Be Interpreted?
 First, change the working directory to whatever was passed as `output_dir`.  Then, run one of the PyMOL scripts.  The script displays all clusters.  This is necessary in order to get PyMOL to scale the b-factors correctly.  But it's hard to understand.  To examine the output, do the following:
 
