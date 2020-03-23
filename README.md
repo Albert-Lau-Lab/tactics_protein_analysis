@@ -1,6 +1,9 @@
 # CAPSTICS Pocket Finder Code
 This code finds the locations of possible cryptic pockets within MD trajectories.
 
+## Requirements
+Running CAPSTICS requires that MDAnalysis be installed.  Autodock Vina must be installed so that it can be run using the command `vina`.  ConCavity must be installed so that it can be run using the command `concavity`.
+
 ## Usage
 #### Locations of the Code
 The directory `train_model` includes the code that was used to train the ML model.  It is expected that most software users will not need to run the code in this directory.
@@ -62,7 +65,7 @@ First, change the working directory to whatever was passed as `output_dir`.  The
  * It may be useful to load `centroid_<cluster_num>.pdb` and display it as a cartoon.  This will make it easier to determine where in the protein each predicted pocket is.
  * Repeat the process for each cluster centroid.
 
-#### Debugging
+## Debugging
 If the computer runs out of RAM, it may stop running the code and give the error message `Killed`.  If this happens, reduce the size of the input file or free up more RAM.
 
 If the code predicts numerous pockets but each pocket only has one residue, then the segids of the input may be wrong.  They must be of the form `PROA`, `PROB`, etc.
