@@ -2,7 +2,7 @@
 This code finds the locations of possible cryptic pockets within MD trajectories.
 
 ## Requirements
-Running CAPSTICS requires that MDAnalysis be installed.  Autodock Vina must be installed so that it can be run using the command `vina`.  ConCavity must be installed so that it can be run using the command `concavity`.
+Running CAPSTICS requires that MDAnalysis be installed.  Autodock Vina must be installed so that it can be run using the command `vina`.  ConCavity must be installed so that it can be run using the command `concavity`.  VMD must be installed so that it can be run using the command `vmd`.
 
 ## Usage
 #### Locations of the Code
@@ -71,3 +71,5 @@ If the computer runs out of RAM, it may stop running the code and give the error
 If the code predicts numerous pockets but each pocket only has one residue, then the segids of the input may be wrong.  They must be of the form `PROA`, `PROB`, etc.
 
 If the code predicts no pockets, then `ml_score_thresh` and `ml_std_thresh` may be too high.
+
+If the code gives the error message `KeyError: '1:A'`, then the apo structure's residue and chain nomenclature may not match the nomenclature used in the trajectory.

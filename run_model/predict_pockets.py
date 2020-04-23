@@ -149,7 +149,10 @@ def predict_pockets(output_dir, num_clusters, run_name, apo_pdb_loc, psf_loc=Non
                 # The next line looks unnecessary, but it is needed for MDAnalysis to
                 # be working on the correct frame.
                 centroid_frame = universe.trajectory[centroid]
-                centroid_prot = universe.select_atoms("protein")
+                # I haven't found a "select everything" command in MDAnalysis.  Since all
+                # chains should have segids beginning with "PROT", selecting everything that
+                # doesn't have segid "AAAA" should select everything.
+                centroid_prot = universe.select_atoms("not segid AAAA")
                 search_centroid = MDAnalysis.lib.NeighborSearch.AtomNeighborSearch(centroid_prot)
                 resnum = int(residue[0:-2])
                 chain = residue[-1]
