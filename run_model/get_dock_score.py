@@ -8,6 +8,9 @@ import math
 from get_list_of_segids import get_list_of_segids
 
 
+prepare_receptor_loc = "~/MGLTools-1.5.6/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_receptor4.py"
+
+
 def get_dock_score(prot_name, pdb_file_loc, output_dir, segid, center=None, size=None,
                    extra_space=8):
     """Get each residue's dock using the ConCavity algorithm.
@@ -91,8 +94,7 @@ def get_dock_score(prot_name, pdb_file_loc, output_dir, segid, center=None, size
 
 
     prot_pdbqt_loc = "%s/%s.pdbqt" %(output_dir, prot_name)
-    subprocess.run(("~/MGLTools-1.5.6/MGLToolsPckgs/AutoDockTools/Utilities24/"
-                    "prepare_receptor4.py -r %s -o %s" %(pdb_file_loc, prot_pdbqt_loc)),
+    subprocess.run(("%s -r %s -U nphs_lps_waters -o %s" %(prepare_receptor_loc, pdb_file_loc, prot_pdbqt_loc)),
                    shell=True)
     print("done with prepare_receptor4")
 

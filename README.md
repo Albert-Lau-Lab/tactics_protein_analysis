@@ -2,7 +2,7 @@
 This code finds the locations of possible cryptic pockets within MD trajectories.
 
 ## Requirements
-Running CAPSTICS requires that MDAnalysis be installed.  Autodock Vina must be installed so that it can be run using the command `vina`.  ConCavity must be installed so that it can be run using the command `concavity`.  VMD must be installed so that it can be run using the command `vmd`.
+Running CAPSTICS requires that MDAnalysis be installed.  Autodock Vina must be installed so that it can be run using the command `vina`.  ConCavity must be installed so that it can be run using the command `concavity`.  VMD must be installed so that it can be run using the command `vmd`.  The file `get_dock_score.py` must be modified so that `prepare_receptor_loc` stores the location of the script `prepare_receptor4.py` (which must be downloaded from MGLTools).
 
 ## Usage
 #### Locations of the Code
