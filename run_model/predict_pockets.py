@@ -256,7 +256,7 @@ def predict_pockets(output_dir, num_clusters, run_name, apo_pdb_loc, psf_loc=Non
                     btl = [center[0]-(size[0]/2), center[1]+(size[1]/2), center[2]-(size[2]/2)]
                     btr = [center[0]+(size[0]/2), center[1]+(size[1]/2), center[2]-(size[2]/2)]
                     this_cmd_str = ""
-                    this_cmd_str += 'cmd.load_cgo([BEGIN, LINES, '
+                    this_cmd_str += 'cmd.load_cgo([BEGIN, LINES, COLOR, 1, 1, 1, '
                     for pair in [[fbl, fbr], [fbl, ftl], [fbr, ftr], [ftl, ftr],
                                  [bbl, bbr], [bbl, btl], [bbr, btr], [btl, btr],
                                  [fbl, bbl], [ftl, btl], [fbr, bbr], [ftr, btr]]:
@@ -354,7 +354,8 @@ def predict_pockets(output_dir, num_clusters, run_name, apo_pdb_loc, psf_loc=Non
                                          "as cartoon\n"
                                          "cartoon putty\n")
         pymol_script_bg_white_file.write(pymol_show_resis)
-        pymol_script_bg_white_file.write(all_cmd_str)
+        all_cmd_str_white = all_cmd_str.replace("COLOR, 1, 1, 1,", "COLOR, 0, 0, 0,")
+        pymol_script_bg_white_file.write(all_cmd_str_white)
         pymol_script_bg_white_file.write("set stick_color, black\n")
         pymol_script_bg_white_file.write("set bg_rgb,[1,1,1]")
 
