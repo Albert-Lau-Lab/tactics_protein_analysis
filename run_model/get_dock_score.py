@@ -7,8 +7,11 @@ import math
 
 from get_list_of_segids import get_list_of_segids
 
-
-prepare_receptor_loc = "~/MGLTools-1.5.6/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_receptor4.py"
+### WARNING: The values of mgltools_loc, pythonsh_loc, and prepare_receptor4_loc
+# must be set to the correct values before running CAPSTICS.
+mgltools_loc = "/home-1/devans61@jhu.edu/code/devans61/mgltools_x86_64Linux2_1.5.6"
+pythonsh_loc = "%s/bin/pythonsh" %(mgltools_loc)
+prepare_receptor4_loc = "%s/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_receptor4.py" %(mgltools_loc)
 
 
 def get_dock_score(prot_name, pdb_file_loc, output_dir, segid, center=None, size=None,
@@ -94,7 +97,7 @@ def get_dock_score(prot_name, pdb_file_loc, output_dir, segid, center=None, size
 
 
     prot_pdbqt_loc = "%s/%s.pdbqt" %(output_dir, prot_name)
-    subprocess.run(("%s -r %s -U nphs_lps_waters -o %s" %(prepare_receptor_loc, pdb_file_loc, prot_pdbqt_loc)),
+    subprocess.run(("%s %s -r %s -U nphs_lps_waters -o %s" %(pythonsh_loc, prepare_receptor4_loc, pdb_file_loc, prot_pdbqt_loc)),
                    shell=True)
     print("done with prepare_receptor4")
 
