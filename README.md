@@ -1,8 +1,8 @@
-# CAPSTICS Pocket Finder Code
+# TACTICS Pocket Finder Code
 This code finds the locations of possible cryptic pockets within MD trajectories.
 
 ## Requirements
-Running CAPSTICS requires that MDAnalysis be installed.  Autodock Vina must be installed so that it can be run using the command `vina`.  ConCavity must be installed so that it can be run using the command `concavity`.  VMD must be installed so that it can be run using the command `vmd`.  The file `get_dock_score.py` must be modified so that `mgltools_loc`, `pythonsh_loc`, and `prepare_receptor_loc` stores the locations of the MGLTools software (which must be downloaded separately).
+Running TACTICS requires that MDAnalysis be installed.  Autodock Vina must be installed so that it can be run using the command `vina`.  ConCavity must be installed so that it can be run using the command `concavity`.  VMD must be installed so that it can be run using the command `vmd`.  The file `get_dock_score.py` must be modified so that `mgltools_loc`, `pythonsh_loc`, and `prepare_receptor_loc` stores the locations of the MGLTools software (which must be downloaded separately).
 
 ## Usage
 #### Locations of the Code
