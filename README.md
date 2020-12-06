@@ -10,6 +10,8 @@ The directory `train_model` includes the code that was used to train the ML mode
 
 The directory `run_model` contains the code to run the model.   ***Users should run the code while `run_model` is the working directory.***
 
+**Warning: the MD trajectory should be aligned to itself, so that the center of mass remains constant.  This matters because TACTICS finds the change in residue positions; motion of the entire protein would bias this.**
+
 #### How to Run the Code
 
 The algorithm is expected to be used through the function `predict_pockets`.  See
@@ -26,15 +28,15 @@ predict_pockets(output_dir, num_clusters, run_name, apo_pdb_loc,
 ```
 Here is an explanation of each argument.  Note that either `universe` or both `psf_loc` and `dcd_loc` must be specified.
 
- * `psf_loc` : string.  The path to the MD trajectory's PSF file.
- * `dcd_loc` : string.  The path to the MD trajectory's DCD file.
+ * `psf_loc` : string.  The path to the aligned MD trajectory's PSF file.
+ * `dcd_loc` : string.  The path to the aligned MD trajectory's DCD file.
  * `output_dir` : string.  The name of the directory where the output is stored.  If the directory already exists, its contents will be overwritten.
  * `num_clusters` : int.  The number of clusters of the MD trajectory to create and analyze.
  * `run_name` : string.  The name of this function call.  It should probably be similar to output_dir.
  * `apo_pdb_loc` : string.  The path to the PDB file of the "apo" structure before MD has started.  This is compared with the frames from the MD trajectory.
  * `psf_loc` : string, optional.  The path to the MD trajectory's PSF file.   If `psf_loc` is `None`, then `dcd_loc` must be `None` and `universe` must not be `None`.
  * `dcd_loc` : string, optional.  The path to the MD trajectory's DCD file.  If `dcd_loc` is `None`, then `psf_loc` must be `None` and `universe` must not be `None`.
- * `universe` : MDAnalysis universe, optional.  An MDAnlysis universe with the protein conformational ensemble (ex. MD trajectory).  If `universe` is `None`, then `psf_loc` and `dcd_loc` must not be `None`.  The code re-opens the file(s) in the universe.  So when the universe is initialized, the file paths must be specific enough that the code can find the files from the predict_pockets function call.  Additionally, the universe's input structures must have segids of the form PROA, PROB, etc. where A,B act as the chain label.
+ * `universe` : MDAnalysis universe, optional.  An MDAnlysis universe with the protein conformational ensemble (ex. aligned MD trajectory).  If `universe` is `None`, then `psf_loc` and `dcd_loc` must not be `None`.  The code re-opens the file(s) in the universe.  So when the universe is initialized, the file paths must be specific enough that the code can find the files from the predict_pockets function call.  Additionally, the universe's input structures must have segids of the form PROA, PROB, etc. where A,B act as the chain label.
  * `clust_max_dist` : float, optional.  The distance threshold (in Angstroms) to determine if a residue with a high ML score should be included in a cluster of other high-scoring residues.  The default value is 11.
  * `ml_score_thresh` : float, optional.  The ML confidence score threshold for determining if a residue is "high-scoring".  It must be between 0 and 1.  The default value is 0.8
  * `ml_std_thresh` : float, optional.  The algorithm ignores residues that have high ML confidence scores in all frames.  It does this by ignoring residues for which the standard deviation of the confidence scores among MD snapshots is less than ml_std_thresh.  This number must be between 0 and 1.  The default value is 0.25.
