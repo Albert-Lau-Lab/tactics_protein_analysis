@@ -16,6 +16,6 @@ output_dir = "output_data/protease"
 num_clusters = 7
 run_name = "protease"
 predict_pockets(output_dir, num_clusters, run_name,
-                "/home/devans61/Desktop/covid-19/capstics/protease_dimer_structures/6M03_aligned.pdb",
+                "/home/devans61/Desktop/covid-19/tactics/protease_dimer_structures/6M03_aligned.pdb",
                 universe=universe,  ml_score_thresh=0.3, ml_std_thresh=0.1)
 
