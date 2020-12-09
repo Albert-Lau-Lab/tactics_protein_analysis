@@ -8,7 +8,7 @@ import math
 from get_list_of_segids import get_list_of_segids
 
 ### WARNING: The values of mgltools_loc, pythonsh_loc, and prepare_receptor4_loc
-# must be set to the correct values before running CAPSTICS.
+# must be set to the correct values before running TACTICS.
 mgltools_loc = "/home-1/devans61@jhu.edu/code/devans61/mgltools_x86_64Linux2_1.5.6"
 pythonsh_loc = "%s/bin/pythonsh" %(mgltools_loc)
 prepare_receptor4_loc = "%s/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_receptor4.py" %(mgltools_loc)
