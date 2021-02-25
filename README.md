@@ -2,7 +2,13 @@
 This code finds the locations of possible cryptic pockets within MD trajectories.
 
 ## Requirements
-Running TACTICS requires that MDAnalysis be installed.  Autodock Vina must be installed so that it can be run using the command `vina`.  ConCavity must be installed so that it can be run using the command `concavity`.  VMD must be installed so that it can be run using the command `vmd`.  The file `get_dock_score.py` must be modified so that `mgltools_loc`, `pythonsh_loc`, and `prepare_receptor_loc` stores the locations of the MGLTools software (which must be downloaded separately).
+Running TACTICS requires that the following be installed:
+* The MDAnalysis python package.  Can be installed using `pip install --upgrade MDAnalysis` or (if you have conda) `conda config --add channels conda-forge && conda install mdanalysis && conda update mdanalysis`.  See https://www.mdanalysis.org/pages/installation_quick_start/.
+* Autodock Vina must be installed so that it can be run using the command `vina`.  See http://vina.scripps.edu/.  Adding a command like `alias vina=path/to/vina/executable` to your `.bashrc` file should work (after downloading Vina).
+* ConCavity must be installed so that it can be run using the command `concavity`.  See https://compbio.cs.princeton.edu/concavity/; download and compile the source code.  Then add something like `alias concavity=path/to/concavity/executable` to your `.bashrc`.
+* VMD must be installed so that it can be run using the command `vmd`.  See http://www.ks.uiuc.edu/Research/vmd/.
+* MGLTools must be installed.  See https://ccsb.scripps.edu/mgltools/.  WARNING: As of February 25, 2021, MGLTools doesn't work on Mac OS Catalina or newer.  Use a virtual machine or a different computer.
+* The file `get_dock_score.py` must be modified so that `mgltools_loc`, `pythonsh_loc`, and `prepare_receptor_loc` stores the locations of the MGLTools software.
 
 ## Usage
 #### Locations of the Code
