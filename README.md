@@ -4,7 +4,7 @@ This code finds the locations of possible cryptic pockets within MD trajectories
 ## Requirements
 Running TACTICS requires that the following be installed:
 * The MDAnalysis python package.  Can be installed using `pip install --upgrade MDAnalysis` or (if you have conda) `conda config --add channels conda-forge && conda install mdanalysis && conda update mdanalysis`.  See https://www.mdanalysis.org/pages/installation_quick_start/.
-* The scikit-learn python package.  Can be installed using `pip instal scikit-learn`.  See https://scikit-learn.org/stable/install.html.
+* The scikit-learn python package, version 0.21.2.  Can be installed using `pip instal scikit-learn==0.21.2`.  See https://scikit-learn.org/stable/install.html.
 * Autodock Vina must be installed so that it can be run using the command `vina`.  See http://vina.scripps.edu/.  Adding a command like `alias vina=path/to/vina/executable` to your `.bashrc` file should work (after downloading Vina).
 * ConCavity must be installed so that it can be run using the command `concavity`.  See https://compbio.cs.princeton.edu/concavity/; download and compile the source code.  Then add something like `alias concavity=path/to/concavity/executable` to your `.bashrc`.
 * VMD must be installed so that it can be run using the command `vmd`.  See http://www.ks.uiuc.edu/Research/vmd/.
