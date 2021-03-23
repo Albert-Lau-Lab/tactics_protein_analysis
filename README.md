@@ -9,6 +9,7 @@ Running TACTICS requires that the following be installed:
 * Autodock Vina must be installed so that it can be run using the command `vina`.  See http://vina.scripps.edu/.  Adding a command like `alias vina=path/to/vina/executable` to your `.bashrc` file should work (after downloading Vina).
 * ConCavity must be installed so that it can be run using the command `concavity`.  See https://compbio.cs.princeton.edu/concavity/; download and compile the source code.  Then add something like `alias concavity=path/to/concavity/executable` to your `.bashrc`.
 * VMD must be installed so that it can be run using the command `vmd`.  See http://www.ks.uiuc.edu/Research/vmd/.
+* PyMOL must be installed.  For info on open-source versions of PyMOL, see https://pymolwiki.org/index.php/Linux_Install and https://github.com/schrodinger/pymol-open-source.  Installing using a package manager ex. `apt-get` might be easier than installing from source.  Alternatively, see https://pymol.org/2/ for info on the proprietary version of PyMOL.
 * MGLTools must be installed.  See https://ccsb.scripps.edu/mgltools/.  WARNING: As of February 25, 2021, MGLTools doesn't work on Mac OS Catalina or newer.  Use a virtual machine or a different computer.
 * The file `get_dock_score.py` must be modified so that `mgltools_loc`, `pythonsh_loc`, and `prepare_receptor_loc` stores the locations of the MGLTools software.
 
