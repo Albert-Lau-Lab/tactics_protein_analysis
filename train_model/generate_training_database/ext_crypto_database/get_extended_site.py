@@ -33,6 +33,7 @@ def get_extended_site(holo_pdb_loc, ligand_resn, ligand_resi, ligand_chain, site
         the value of site_chain.
     """
 
+    print("getting extended site for", holo_pdb_loc, ligand_resn, ligand_resi, ligand_chain, site_chain)
     pymol.cmd.reinitialize()
     pymol.cmd.load(holo_pdb_loc)
     # Select the ligand.  Find its centroid.

@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 
 import requests
 from requests.exceptions import ConnectionError
-
+import prody
 
 class PDBProt:
     '''
@@ -101,8 +101,24 @@ def get_similar_pdbs(pdb_id, chain_id):
         structure's MEX heteroatom causes Modeller to crash.
     """
 
-    r = requests.get("https://www.rcsb.org/pdb/rest/sequenceCluster?cluster=95"
+    prody.fetchPDBClusters(95)
+    similar_pdbs_and_chains = prody.listPDBCluster(pdb_id, chain_id, sqid=95)
+    similar_pdbs_reformatted = []
+    for similar_pdb_and_chain in similar_pdbs_and_chains:
+        similar_pdb_id = similar_pdb_and_chain[0]
+        similar_pdb_chain = similar_pdb_and_chain[1]
+        # Some PDBs (ex. 4V8Q) have 2-letter chain IDs.  This breaks some of my later
+        # code; I don't think that 2-letter chains are part of the official PDB
+        # specification.  To make my code simple, I ignore these PDBs.
+        if len(similar_pdb_chain) == 1:
+            if similar_pdb_id.lower() != "3ow6":
+                similar_pdbs_reformatted.append(PDBProt(similar_pdb_id, similar_pdb_chain))
+    return similar_pdbs_reformatted
+
+
+    '''r = requests.get("https://www.rcsb.org/pdb/rest/sequenceCluster?cluster=95"
                      "&structureId=%s.%s" %(pdb_id, chain_id))
+    print("pdb_id:", pdb_id, "chain_id:", chain_id, "r", r)
     root = ET.fromstring(r.text)
     similar_pdbs = []
     for child in root:
@@ -116,7 +132,7 @@ def get_similar_pdbs(pdb_id, chain_id):
         if len(similar_pdb_chain) == 1:
             if similar_pdb_id.lower() != "3ow6":
                 similar_pdbs.append(PDBProt(similar_pdb_id, similar_pdb_chain))
-    return similar_pdbs
+    return similar_pdbs'''
 
 def download_similar_pdbs(pdb_id, chain_id, fasta_download_dir, pdb_download_dir,
                           csv_loc):

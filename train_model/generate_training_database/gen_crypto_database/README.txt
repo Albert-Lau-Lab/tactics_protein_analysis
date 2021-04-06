@@ -45,16 +45,34 @@
     holo_pdbs_formatted_for_downloader.txt, which are formatted in the way
     that the PDB's downloader expects.
 
-(7) Go to https://www.rcsb.org/pdb/download/download.do.  Paste the contents
-    of apo_pdbs_formatted_for_downloader.txt into the webpage, select "PDB"
-    instead of "PDB/mmCIF" and "uncompressed" instead of "gzipped", and
-    download the PDBs into a directory named apo_structures.  Do the same for
-    the holo structures, putting them in a directory named holo_structures.
-        * There shouldn't be any extra files (tar files, downloader scripts,
-          etc.) in the directories.  If there are any extra files, delete
-          them.
+(7) Download the PDB files for the CryptoSite database proteins:
+    (a) Go to https://www.rcsb.org/docs/programmatic-access/batch-downloads-with-shell-script.
+        Download the "batch-download script".
+    (b) Make a directory (within this directory) called apo_structures.  Copy (cp command; not mv)
+        the "batch-download script" and apo_pdbs_formatted_for_downloader.txt into the
+        apo_structures directory.
+    (c) Run the "batch-download script" using the following command:
+            ./batch_download.sh -f apo_pdbs_formatted_for_downloader.txt -p
+    (d) Delete the "batch-download script", apo_pdbs_formatted_for_downloader.txt,
+        and any other non-pdb files from the apo_structures directory.
+    (e) Repeat steps (b), (c), and (d) for holo proteins, using the file
+        holo_pdbs_formatted_for_downloader.txt and the directory holo_structures.
+    (f) The holo dataset contains the protein 1fqc.  The PDB file underwent
+        "remediation" after the CryptoSite database was created, so that the
+        version on the PDB website is slightly different from the version used
+        to train TACTICS.  Download version 1.2 of the structure from the PDB
+        website; replace the downloaded structure in holo_structures with
+        version 1.2.  If needed, change the filename so it is the same as
+        the download structure's filename.
+    (g) Similarly, replace holo structure 2ixu with version 1.4.  Replace
+        2eum with version 1.3.
+    (h) Run the following command in apo_structures and holo_structures
+        to convert the filenames to lowercase:
+            for i in $( ls | grep [A-Z] ); do mv -i $i `echo $i | tr 'A-Z' 'a-z'`; done
 
-(8) Similarly to step 7, download the FASTA files into directories apo_seqs
+(8) NOTE: THIS STEP MIGHT NOT BE NECESSARY.
+    Similarly to step 7, go to https://www.rcsb.org/downloads/fasta.
+    Download the FASTA files into directories apo_seqs
     and holo_seqs.  Select "Individual FASTA Files" and "uncompressed" on the
     webpage.
 
