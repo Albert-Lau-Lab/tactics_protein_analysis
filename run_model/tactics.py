@@ -14,10 +14,10 @@ from change_b_factor_from_dict import change_b_factor_from_dict
 from cluster_trajectory import cluster_trajectory
 
 
-def predict_pockets(output_dir, num_clusters, run_name, apo_pdb_loc, psf_loc=None,
-                    dcd_loc=None, universe=None,
-                    clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25,
-                    dock_extra_space=8):
+def tactics(output_dir, num_clusters, run_name, apo_pdb_loc, psf_loc=None,
+            dcd_loc=None, universe=None,
+            clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25,
+            dock_extra_space=8):
     """Predict the locations of binding pockets in an MD trajectory.
 
     This is the function that is expected to be called by users.  It uses a novel algorithm

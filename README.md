@@ -23,17 +23,17 @@ The directory `run_model` contains the code to run the model.   ***Users should 
 
 #### How to Run the Code
 
-The algorithm is expected to be used through the function `predict_pockets`.  See
-`run_model/run_predict_pockets.py` for an example.  Calling the function
-`predict_pockets` will run the pocket-finding algorithm and store the results
+The algorithm is expected to be used through the function `tactics`.  See
+`run_model/run_tactics.py` for an example.  Calling the function
+`tactics` will run the pocket-finding algorithm and store the results
 wherever `output_dir` is.
 
-Here is the order of arguments to `predict_pockets`:
+Here is the order of arguments to 'tactics`:
 
 ```
-predict_pockets(output_dir, num_clusters, run_name, apo_pdb_loc,
-                psf_loc=None, dcd_loc=None, universe=None,
-                clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25)
+tactics(output_dir, num_clusters, run_name, apo_pdb_loc,
+        psf_loc=None, dcd_loc=None, universe=None,
+        clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25)
 ```
 Here is an explanation of each argument.  Note that either `universe` or both `psf_loc` and `dcd_loc` must be specified.
 
@@ -45,7 +45,7 @@ Here is an explanation of each argument.  Note that either `universe` or both `p
  * `apo_pdb_loc` : string.  The path to the PDB file of the "apo" structure before MD has started.  This is compared with the frames from the MD trajectory.
  * `psf_loc` : string, optional.  The path to the MD trajectory's PSF file.   If `psf_loc` is `None`, then `dcd_loc` must be `None` and `universe` must not be `None`.
  * `dcd_loc` : string, optional.  The path to the MD trajectory's DCD file.  If `dcd_loc` is `None`, then `psf_loc` must be `None` and `universe` must not be `None`.
- * `universe` : MDAnalysis universe, optional.  An MDAnlysis universe with the protein conformational ensemble (ex. aligned MD trajectory).  If `universe` is `None`, then `psf_loc` and `dcd_loc` must not be `None`.  The code re-opens the file(s) in the universe.  So when the universe is initialized, the file paths must be specific enough that the code can find the files from the predict_pockets function call.  Additionally, the universe's input structures must have segids of the form PROA, PROB, etc. where A,B act as the chain label.
+ * `universe` : MDAnalysis universe, optional.  An MDAnlysis universe with the protein conformational ensemble (ex. aligned MD trajectory).  If `universe` is `None`, then `psf_loc` and `dcd_loc` must not be `None`.  The code re-opens the file(s) in the universe.  So when the universe is initialized, the file paths must be specific enough that the code can find the files from the `tactics` function call.  Additionally, the universe's input structures must have segids of the form PROA, PROB, etc. where A,B act as the chain label.
  * `clust_max_dist` : float, optional.  The distance threshold (in Angstroms) to determine if a residue with a high ML score should be included in a cluster of other high-scoring residues.  The default value is 11.  This value is not expected to need changing from system to system; the default value is recommended.
  * `ml_score_thresh` : float, optional.  The ML confidence score threshold for determining if a residue is "high-scoring".  It must be between 0 and 1.  The default value is 0.8
  * `ml_std_thresh` : float, optional.  The algorithm ignores residues that have high ML confidence scores in all frames.  It does this by ignoring residues for which the standard deviation of the confidence scores among MD snapshots is less than ml_std_thresh.  This number must be between 0 and 1.  The default value is 0.25.
@@ -56,7 +56,7 @@ Here is an explanation of each argument.  Note that either `universe` or both `p
  
  `output_dir` contains many files.  Most of them are created by intermediate steps of the algorithm and aren't useful.  Here are the files that are expected to be useful:
  
-  * `display_black_bg.pml` is a PyMOL script to display the results.  Recall that the function `predict_pockets` begins by clustering the MD trajectory based on structure.  This PyMOL script displays a frame from each cluster; it does the following:
+  * `display_black_bg.pml` is a PyMOL script to display the results.  Recall that the function `tactics` begins by clustering the MD trajectory based on structure.  This PyMOL script displays a frame from each cluster; it does the following:
     * Residues that are predicted by ML to be in cryptic pockets are shown in white sticks.
     * Residues with high ML scores are clustered; fragment docking is done on each cluster.  The B-factor putty displays the fragment dock scores.
     * The boxes show the boundaries for the fragment dock calculations.  They are slightly larger than the predicted binding sites.
