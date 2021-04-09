@@ -41,7 +41,6 @@ Here is an explanation of each argument.  Note that either `universe` or both `p
  * `dcd_loc` : string.  The path to the aligned MD trajectory's DCD file.
  * `output_dir` : string.  The name of the directory where the output is stored.  If the directory already exists, its contents will be overwritten.
  * `num_clusters` : int.  The number of clusters of the MD trajectory to create and analyze.
- * `run_name` : string.  The name of this function call.  It should probably be similar to output_dir.
  * `apo_pdb_loc` : string.  The path to the PDB file of the "apo" structure before MD has started.  This is compared with the frames from the MD trajectory.
  * `psf_loc` : string, optional.  The path to the MD trajectory's PSF file.   If `psf_loc` is `None`, then `dcd_loc` must be `None` and `universe` must not be `None`.
  * `dcd_loc` : string, optional.  The path to the MD trajectory's DCD file.  If `dcd_loc` is `None`, then `psf_loc` must be `None` and `universe` must not be `None`.

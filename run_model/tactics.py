@@ -14,7 +14,7 @@ from change_b_factor_from_dict import change_b_factor_from_dict
 from cluster_trajectory import cluster_trajectory
 
 
-def tactics(output_dir, num_clusters, run_name, apo_pdb_loc, psf_loc=None,
+def tactics(output_dir, num_clusters, apo_pdb_loc, psf_loc=None,
             dcd_loc=None, universe=None,
             clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25,
             dock_extra_space=8):
@@ -30,8 +30,6 @@ def tactics(output_dir, num_clusters, run_name, apo_pdb_loc, psf_loc=None,
         If the directory already exists, its contents will be overwritten.
     num_clusters : int
         The number of clusters of the MD trajectory to create and analyze.
-    run_name : string
-        The name of this function call.  It should probably be similar to output_dir.
     apo_pdb_loc : string
         The path to the PDB file of the "apo" structure before MD has started.  This is
         compared with the frames from the MD trajectory.
@@ -78,7 +76,7 @@ def tactics(output_dir, num_clusters, run_name, apo_pdb_loc, psf_loc=None,
         shutil.rmtree(output_dir)
     os.mkdir(output_dir)
 
-    func_out_file_loc = "%s/%s_output.txt" %(output_dir, run_name)
+    func_out_file_loc = "%s/written_output.txt" %(output_dir)
     with open(func_out_file_loc, "w") as func_out_file:
         func_out_file.truncate()
 
