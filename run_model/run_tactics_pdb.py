@@ -14,7 +14,7 @@ universe = MDAnalysis.Universe("/home/devans61/Desktop/covid-19/capstics/proteas
 
 output_dir = "output_data/protease"
 num_clusters = 7
-tactics(output_dir, num_clusters,
+tactics(output_dir,
         "/home/devans61/Desktop/covid-19/tactics/protease_dimer_structures/6M03_aligned.pdb",
-        universe=universe,  ml_score_thresh=0.3, ml_std_thresh=0.1)
+        universe=universe,  num_clusters=num_clusters, ml_score_thresh=0.3, ml_std_thresh=0.1)
 

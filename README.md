@@ -31,23 +31,23 @@ wherever `output_dir` is.
 Here is the order of arguments to 'tactics`:
 
 ```
-tactics(output_dir, num_clusters, run_name, apo_pdb_loc,
-        psf_loc=None, dcd_loc=None, universe=None,
-        clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25)
+tactics(output_dir, apo_pdb_loc, psf_loc=None, dcd_loc=None, universe=None,
+        num_clusters=None, alt_clustering_method=None, ml_score_thresh=0.8,
+        ml_std_thresh=0.25, dock_extra_space=8, clust_max_dist=11)
 ```
 Here is an explanation of each argument.  Note that either `universe` or both `psf_loc` and `dcd_loc` must be specified.
 
- * `psf_loc` : string.  The path to the aligned MD trajectory's PSF file.
- * `dcd_loc` : string.  The path to the aligned MD trajectory's DCD file.
  * `output_dir` : string.  The name of the directory where the output is stored.  If the directory already exists, its contents will be overwritten.
- * `num_clusters` : int.  The number of clusters of the MD trajectory to create and analyze.
  * `apo_pdb_loc` : string.  The path to the PDB file of the "apo" structure before MD has started.  This is compared with the frames from the MD trajectory.
  * `psf_loc` : string, optional.  The path to the MD trajectory's PSF file.   If `psf_loc` is `None`, then `dcd_loc` must be `None` and `universe` must not be `None`.
  * `dcd_loc` : string, optional.  The path to the MD trajectory's DCD file.  If `dcd_loc` is `None`, then `psf_loc` must be `None` and `universe` must not be `None`.
  * `universe` : MDAnalysis universe, optional.  An MDAnlysis universe with the protein conformational ensemble (ex. aligned MD trajectory).  If `universe` is `None`, then `psf_loc` and `dcd_loc` must not be `None`.  The code re-opens the file(s) in the universe.  So when the universe is initialized, the file paths must be specific enough that the code can find the files from the `tactics` function call.  Additionally, the universe's input structures must have segids of the form PROA, PROB, etc. where A,B act as the chain label.
- * `clust_max_dist` : float, optional.  The distance threshold (in Angstroms) to determine if a residue with a high ML score should be included in a cluster of other high-scoring residues.  The default value is 11.  This value is not expected to need changing from system to system; the default value is recommended.
+ * `num_clusters` : int.  The number of k-means clusters to create.  Either `num_clusters` or `alt_clustering_method` must be `None`.
+ * alt_clustering_method : MDAnalysis ClusteringMethod object.  An algorithm used to be used to cluster the trajectory.  If `alt_clustering_method` is `None`, then k-means will be used.  Either `alt_clustering_method` or `num_clusters` must be `None`.
  * `ml_score_thresh` : float, optional.  The ML confidence score threshold for determining if a residue is "high-scoring".  It must be between 0 and 1.  The default value is 0.8
  * `ml_std_thresh` : float, optional.  The algorithm ignores residues that have high ML confidence scores in all frames.  It does this by ignoring residues for which the standard deviation of the confidence scores among MD snapshots is less than ml_std_thresh.  This number must be between 0 and 1.  The default value is 0.25.
+ * dock_extra_space : float, optional.  The space (in Angstroms) added to each side of the predicted site when determining the region to perform docking in.  The default value is 8.  This value is not expected to need changing from system to system; the default value is recommended.
+ * `clust_max_dist` : float, optional.  The distance threshold (in Angstroms) to determine if a residue with a high ML score should be included in a cluster of other high-scoring residues.  The default value is 11.  This value is not expected to need changing from system to system; the default value is recommended.
  
  
 #### What Files Are Created?
@@ -61,7 +61,8 @@ Here is an explanation of each argument.  Note that either `universe` or both `p
     * The boxes show the boundaries for the fragment dock calculations.  They are slightly larger than the predicted binding sites.
   * `display_white_bg.pml` is similar to `display_black_bg.pml`, except that the ML predictions are shown in black and the background is white.  The white background is often more suitable for making publication images than the black background.
   * Each cluster's structure is written to the file `centroid_<cluster_num>.pdb` where `<cluster_num>` is the number of the cluster.
-  * `<run_name>_output.txt` lists each predicted site.  It records the center and size of each docking box (from when Autodock Vina was run within the algorithm), this can be used as an approximate quantification of the site's location.
+  * `written_output.txt` lists each predicted site.  It records the center and size of each docking box (from when Autodock Vina was run within the algorithm); this can be used as an approximate quantification of the site's location.
+  * `times.txt` lists the total time in seconds that TACTICS took to run, along with the times taken by several steps of the algorithm.
 #### How Can the Output Be Interpreted?
 First, change the working directory to whatever was passed as `output_dir`.  Then, run one of the PyMOL scripts.  The script displays all clusters.  This is necessary in order to get PyMOL to scale the b-factors correctly.  But it's hard to understand.  To examine the output, do the following:
 
