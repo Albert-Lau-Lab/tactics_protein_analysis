@@ -1,6 +1,7 @@
 import os
 import shutil
 import json
+import time
 
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering
@@ -14,10 +15,10 @@ from change_b_factor_from_dict import change_b_factor_from_dict
 from cluster_trajectory import cluster_trajectory
 
 
-def tactics(output_dir, num_clusters, apo_pdb_loc, psf_loc=None,
-            dcd_loc=None, universe=None,
-            clust_max_dist=11, ml_score_thresh=0.8, ml_std_thresh=0.25,
-            dock_extra_space=8):
+def tactics(output_dir, apo_pdb_loc, psf_loc=None,
+            dcd_loc=None, universe=None, num_clusters=None, alt_clustering_method=None,
+            ml_score_thresh=0.8, ml_std_thresh=0.25,
+            dock_extra_space=8, clust_max_dist=11):
     """Predict the locations of binding pockets in an MD trajectory.
 
     This is the function that is expected to be called by users.  It uses a novel algorithm
@@ -28,15 +29,9 @@ def tactics(output_dir, num_clusters, apo_pdb_loc, psf_loc=None,
     output_dir : string
         The name of the directory where the output is stored.
         If the directory already exists, its contents will be overwritten.
-    num_clusters : int
-        The number of clusters of the MD trajectory to create and analyze.
     apo_pdb_loc : string
         The path to the PDB file of the "apo" structure before MD has started.  This is
         compared with the frames from the MD trajectory.
-    clust_max_dist : float, optional
-        The distance threshold (in Angstroms) to determine if a residue with a high ML
-        score should be included in a cluster of other high-scoring residues.  The default
-        value is 11.
     psf_loc : string, optional
         The path to the psf file.  If psf_loc is None, then dcd_loc must be None and
         universe must not be None
@@ -50,6 +45,13 @@ def tactics(output_dir, num_clusters, apo_pdb_loc, psf_loc=None,
         specific enough that the code can find the files from the predict_pockets function call.
         Additionally, the universe's input structures must have segids of the form PROA, PROB,
         etc. where A,B are the same as the chain label.
+    num_clusters : int, optional
+        The number of k-means clusters to create.  Either num_clusters or alt_clustering_method
+        must be None.
+    alt_clustering_method : MDAnalysis ClusteringMethod object, optional
+        An MDAnalysis ClusteringMethod object to be used to cluster the trajectory.  If
+        alt_clustering_method is None, then k-means will be used.  Either
+        alt_clustering_method or num_clusters must be None.
     ml_score_thresh : float, optional
         The ML confidence score threshold for determining if a residue is "high-scoring".  It
         must be between 0 and 1.  The default value is 0.8
@@ -64,6 +66,10 @@ def tactics(output_dir, num_clusters, apo_pdb_loc, psf_loc=None,
         AutoDock Vina won't adequately sample all possible poses.  If the value is too small,
         then the fragments will be trapped in the pocket and the dock scores will be inaccurately
         high.  The default value is 8.
+    clust_max_dist : float, optional
+        The distance threshold (in Angstroms) to determine if a residue with a high ML
+        score should be included in a cluster of other high-scoring residues.  The default
+        value is 11.
 
     Returns
     -------
@@ -71,6 +77,12 @@ def tactics(output_dir, num_clusters, apo_pdb_loc, psf_loc=None,
 
     """
 
+
+    time_start = time.time()
+    if num_clusters is None and alt_clustering_method is None:
+        raise Exception("Either num_clusters or alt_clustering_method must be given")
+    elif num_clusters is not None and alt_clustering_method is not None:
+        raise Exception("Either num_clusters or alt_clustering_method must be None")
 
     if os.path.isdir(output_dir):
         shutil.rmtree(output_dir)
@@ -80,12 +92,20 @@ def tactics(output_dir, num_clusters, apo_pdb_loc, psf_loc=None,
     with open(func_out_file_loc, "w") as func_out_file:
         func_out_file.truncate()
 
-    if universe is None:
-        universe, cluster_object = cluster_trajectory(output_dir, num_clusters, psf_loc=psf_loc,
-                                                      dcd_loc=dcd_loc, seed=0)
+    if universe is None and alt_clustering_method is None:
+        universe, cluster_object = cluster_trajectory(output_dir, psf_loc=psf_loc, dcd_loc=dcd_loc,
+                                                      seed=0, num_clusters=num_clusters)
+    elif universe is not None and alt_clustering_method is None:
+        universe, cluster_object = cluster_trajectory(output_dir, universe=universe,
+                                                      seed=0, num_clusters=num_clusters)
+    elif universe is None:
+        universe, cluster_object = cluster_trajectory(output_dir, psf_loc=psf_loc, dcd_loc=dcd_loc,
+                                                      alt_clustering_method=alt_clustering_method)
     else:
-        universe, cluster_object = cluster_trajectory(output_dir, num_clusters, universe=universe,
-                                                      seed=0)
+        universe, cluster_object = cluster_trajectory(output_dir, universe=universe,
+                                                      alt_clustering_method=alt_clustering_method)
+
+    time_after_traj_cluster = time.time()
 
     # Initialization
     ml_scores_list = {}
@@ -116,6 +136,7 @@ def tactics(output_dir, num_clusters, apo_pdb_loc, psf_loc=None,
             else:
                 ml_scores_list[residue][centroid_index] = ml_conf_this_cluster[residue]
                 ml_scores_list_str[residue][str(centroid_index)] = ml_conf_this_cluster[residue]
+    time_after_ml = time.time()
 
     # The goal is to find clusters of high-scoring residues that are near each other;
     # each cluster is a binding site. The clustering is iterative.  A residue should be
@@ -367,3 +388,17 @@ def tactics(output_dir, num_clusters, apo_pdb_loc, psf_loc=None,
         pymol_script_bg_black_file.write(pymol_show_resis)
         pymol_script_bg_black_file.write(all_cmd_str)
         pymol_script_bg_black_file.write("set stick_color, white\n")
+
+    time_final = time.time()
+
+    # Write times to an output file.
+    duration_traj_cluster = time_after_traj_cluster - time_start
+    duration_ml = time_after_ml - time_after_traj_cluster
+    duration_res_clus_and_dock = time_final - time_after_ml
+    duration_total = time_final - time_start
+    with open("%s/times.txt" %(output_dir), "w") as times_file:
+        times_file.write("Time (s) taken to cluster trajectory: %f\n" %(duration_traj_cluster))
+        times_file.write("Time (s) taken to get ML residue scores: %f\n" %(duration_ml))
+        times_file.write("Time (s) taken to cluster ML scores and run fragment docking: %f\n" %(duration_res_clus_and_dock))
+        times_file.write("Total time (s) taken to run TACTICS: %f\n" %(duration_total))
+

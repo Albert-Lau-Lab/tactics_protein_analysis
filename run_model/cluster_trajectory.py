@@ -6,7 +6,8 @@ from MDAnalysis.analysis.encore import clustering
 from get_list_of_segids import get_list_of_segids
 
 
-def cluster_trajectory(output_dir, num_clusters, psf_loc=None, dcd_loc=None, universe=None, seed=None):
+def cluster_trajectory(output_dir, psf_loc=None, dcd_loc=None,
+                       universe=None, seed=None, num_clusters=None, alt_clustering_method=None):
     """Cluster an MD trajectory, and create a PDB file for each cluster.
 
     The script uses MDAnalysis to cluster the trajectory.  It writes a PDB
@@ -22,19 +23,25 @@ def cluster_trajectory(output_dir, num_clusters, psf_loc=None, dcd_loc=None, uni
         The name of the directory where the output is stored.  This directory
         should already exist.  Any existing contents will NOT be deleted, but
         they may be overwritten.
-    num_clusters : int
-        The number of clusters to create
     psf_loc : string, optional
         The path to the psf file.  If psf_loc is None, then dcd_loc must be None and
         universe must not be None
     dcd_loc : string, optional
         The path to the dcd loc.   If dcd_loc is None, then psf_loc must be None and
-        universe must not be None
+        universe must not be None.
     universe : MDAnalysis universe, optional
         An MDAnlysis universe with the protein conformational ensemble (ex. MD trajectory).
         If universe is None, then psf_loc and dcd_loc must not be None.
     seed : int, optional
-        The seed to use for MDAnalysis's clustering.
+        The seed to use for kmeans clustering.  This is ignored if alt_clustering_method
+        is not None.
+    num_clusters : int, optional
+        The number of k-means clusters to create.  Either num_clusters or alt_clustering_method
+        must be None.
+    alt_clustering_method : MDAnalysis ClusteringMethod object, optional
+        An MDAnalysis ClusteringMethod object to be used in this function.  If
+        alt_clustering_method is None, then this function will use k-means.  Either
+        alt_clustering_method or num_clusters must be None.
 
     Returns
     -------
@@ -49,8 +56,16 @@ def cluster_trajectory(output_dir, num_clusters, psf_loc=None, dcd_loc=None, uni
     # frames of the trajectory are analyzed.
     if universe is None:
         universe = MDAnalysis.Universe(psf_loc, dcd_loc)
-    kmeans = clustering.ClusteringMethod.KMeans(num_clusters, random_state=seed)
-    cluster_object = clustering.cluster.cluster(universe, method=kmeans)
+
+    if num_clusters is None and alt_clustering_method is None:
+        raise Exception("Either num_clusters or alt_clustering_method must be given")
+    elif num_clusters is not None and alt_clustering_method is not None:
+        raise Exception("Either num_clusters or alt_clustering_method must be None")
+    if alt_clustering_method is None:
+        clustering_method = clustering.ClusteringMethod.KMeans(num_clusters, random_state=seed)
+    else:
+        clustering_method = alt_clustering_method
+    cluster_object = clustering.cluster.cluster(universe, method=clustering_method)
 
     # Iterate over the centroid of each cluster of MD frames.  In each iteration,
     # do the following:
