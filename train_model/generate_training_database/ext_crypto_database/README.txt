@@ -1,4 +1,19 @@
-##### Steps to extend the Cryptosite database #####
+Just like the original CryptoSite database, the extended database is
+too big to store on GitHub.  But the list of proteins can be stored,
+so users reconstructing the database do not have to start over from
+the beginning.
+
+##### How to extend the CryptoSite database using this GitHub Repository     #####
+##### (Recommended because it is faster than the alternative below)          #####
+
+* Run the Python script download_pdbs_from_csv.py.
+
+
+
+
+##### Steps to extend the CryptoSite database from scratch   #####
+##### (Not recommended because it involves extra work)       #####
+
 
 (1) Run the Python script run_get_pdbs.py.  It creates the directory
     extended_db.  Within this directory, it creates 2 directories for each

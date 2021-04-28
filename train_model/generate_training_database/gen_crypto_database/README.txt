@@ -1,5 +1,58 @@
-##### Steps to recreate the Cryptosite database #####
+I created a procedure to reconstruct the CryptoSite database.  The reconstructed
+database includes the following important files and directories:
+* Directories apo_structures and holo_structures.  These contain the downloaded
+  PDB files for each database protein.
+* Directories apo_seqs and holo_seqs.  These contain the downloaded FASTA
+  files for each database protein.  I'm not sure if this data is necessary
+  for training the model; it might be possible to train the model without
+  downloading the sequences.
+* Various csv files with lists of the database proteins; the different csv files
+  are in slightly different formats from each other.  A particularly important
+  file is cryptosite_database.csv, which lists whether each residue of each protein 
+  is part of a cryptic site.
 
+The database's set of PDB files is too big to store on GitHub.  However, the csv files
+are small enough that I can include them in this repo.  Users wishing to recreate the CryptoSite
+database can start with these csv files, instead of going through the entire
+procedure.
+
+##### Steps to recreate the Cryptosite database from  this GitHub Repository #####
+##### (Recommended because it is faster than the alternative below)          #####
+(1) Download the PDB files for the CryptoSite database proteins:
+    (a) Go to https://www.rcsb.org/docs/programmatic-access/batch-downloads-with-shell-script.
+        Download the "batch-download script".
+    (b) Make a directory (within this directory) called apo_structures.  Copy (cp command; not mv)
+        the "batch-download script" and apo_pdbs_formatted_for_downloader.txt into the
+        apo_structures directory.
+    (c) Run the "batch-download script" using the following command:
+            ./batch_download.sh -f apo_pdbs_formatted_for_downloader.txt -p
+    (d) Delete the "batch-download script", apo_pdbs_formatted_for_downloader.txt,
+        and any other non-pdb files from the apo_structures directory.
+    (e) Repeat steps (b), (c), and (d) for holo proteins, using the file
+        holo_pdbs_formatted_for_downloader.txt and the directory holo_structures.
+    (f) The holo dataset contains the protein 1fqc.  The PDB file underwent
+        "remediation" after the CryptoSite database was created, so that the
+        version on the PDB website is slightly different from the version used
+        to train TACTICS.  Download version 1.2 of the structure from the PDB
+        website; replace the downloaded structure in holo_structures with
+        version 1.2.  If needed, change the filename so it is the same as
+        the download structure's filename.
+    (g) Similarly, replace holo structure 2ixu with version 1.4.  Replace
+        2eum with version 1.3.
+    (h) Run the following command in apo_structures and holo_structures
+        to convert the filenames to lowercase:
+            for i in $( ls | grep [A-Z] ); do mv -i $i `echo $i | tr 'A-Z' 'a-z'`; done
+
+(2) NOTE: THIS STEP MIGHT NOT BE NECESSARY.
+    Similarly to step 7, go to https://www.rcsb.org/downloads/fasta.
+    Download the FASTA files into directories apo_seqs
+    and holo_seqs.  Select "Individual FASTA Files" and "uncompressed" on the
+    webpage.
+
+
+
+##### Steps to recreate the Cryptosite database from scratch #####
+##### (Not recommended because it involves extra work)       #####
 (1) Copy the list of apo PDB IDs on page 25 of the Cryptosite paper's
     supplemental information.  Paste the list into a blank document named
     apo_ids_unformatted.txt.  Add the apo PDBs on page 29 of the Cryptosite
