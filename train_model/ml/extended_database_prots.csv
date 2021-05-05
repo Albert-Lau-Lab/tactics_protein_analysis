@@ -23,7 +23,7 @@ holoid_chain,apoid_chain
 1imb_B,1ime_A 1ime_B 1imf_A
 1wun_H,1jbu_H 1fak_H
 1pzo_A,1yt4_A 5hw5_A 5hw5_B 5hw5_C 5hw5_D 6ayk_A 6ayk_B 6ayk_C 6ayk_D 5kpu_A 5kpu_B 5kpu_C 5kpu_D 1pzp_A 1li9_A 1zg4_A 5hvi_A 5hvi_B 5hvi_C 5hvi_D 5hw1_A 5hw1_B 5hw1_C 5hw1_D 2b5r_A 2b5r_B 5i52_A 5i52_B 5i52_C 5i52_D 4zj2_A 1jwp_A 5kkf_A 5kkf_B 5kkf_C 5kkf_D 4gku_A 5i63_A 5i63_B 5i63_C 5i63_D 1lhy_A 3cmz_A 6apa_A 6apa_B 6apa_C 6apa_D 5npo_A 1xxm_A 1xxm_B
-1u1d_F,1rxy_A 2qdk_A 2oxf_A 2pga_A 3dps_A 1zl2_A 2iq5_A 1lx7_A 2hsw_A 1y1r_A 1t0u_B 2oec_A 2oec_D 2oec_E 1k3f_A 1k3f_B 1k3f_C 1k3f_D 1k3f_E 1k3f_F 4ogk_C 1rxs_A 1rxs_L 1sj9_A 1sj9_C 1sj9_D 1sj9_E 1sj9_F 1ryz_A 1ryz_C 1ryz_D 1ryz_E 1ryz_F
+1u1d_F,1rxy_A 2qdk_A 2oxf_A 2pga_A 3dps_A 1zl2_A 2iq5_A 1lx7_A 2hsw_A 1y1r_A 1t0u_B 2oec_A 2oec_D 2oec_E 1k3f_A 1k3f_B 1k3f_C 1k3f_D 1k3f_E 1k3f_F 4ogk_C 1rxs_A 1rxs_L 1rxs_d 1rxs_m 1rxs_o 1sj9_A 1sj9_C 1sj9_D 1sj9_E 1sj9_F 1ryz_A 1ryz_C 1ryz_D 1ryz_E 1ryz_F
 2egh_B,1k5h_A 1k5h_C
 2ofp_A,1ks9_A 1yjq_A
 1grn_A,1kz7_B 1kz7_D 6tky_C 3gcg_A 1kzg_B 1kzg_D 6ajl_B 6ajl_D 6ajl_F 6ajl_H 6aj4_B 6aj4_D 6aj4_F 6aj4_H 5fi1_B 5upl_B 2kb0_A 2ase_A 1ees_A 1aje_A
@@ -45,7 +45,7 @@ holoid_chain,apoid_chain
 3ixj_C,3tpj_A 5mcq_A 1fkn_A 1fkn_B 1xn2_A 1xn2_B 1xn2_C 1xn2_D 1w50_A 1sgz_A 1sgz_B 1sgz_C 1sgz_D 1xn3_A 1xn3_B 1xn3_C 1xn3_D 3l59_B 2zhv_A 1m4h_A 1m4h_B 2zht_A 2zhr_A 2zhr_B 2zhu_A 3tpl_A 3tpl_B 3tpl_C 5mbw_A 2zhs_A 3r1g_B
 1ow3_B,5jhg_F 1xcg_B 1xcg_F 3t06_B 3t06_F 1lb1_B 1lb1_D 1lb1_F 1lb1_H 2rgn_C 2rgn_F
 1xvc_A,1mty_D 1mty_E 1fz1_A 1fz1_B 1fz3_A 1fz3_B 1fz7_A 1fz7_B 1fz0_A 1fz0_B 1mmo_D 1mmo_E 1fyz_A 1fyz_B 1fz2_A 1fz2_B 1fz6_A 1fz6_B 1xmg_A 1xmg_B 1xmh_A 1xmh_B 1xmf_A 1xmf_B 1fz5_A 1fz5_B 1fz4_A 1fz4_B 4gam_A 4gam_F 4gam_K 4gam_P
-1py2_A,5lqb_A 4nem_A 1m47_A 1nbp_A 2b5i_A 3ink_C 3ink_D 5utz_A 5utz_D 5utz_E 5utz_I 1m4c_A 1m4c_B 1z92_A 2erj_D 2erj_H 3qb1_A 3qb1_B 3qb1_C 3qb1_E 3qb1_F 3qb1_H 3qaz_A 3qaz_D 3qaz_G 3qaz_J 3qaz_M 3qaz_P 3qaz_S 3qaz_V 3qaz_Y 1irl_A
+1py2_A,5lqb_A 4nem_A 1m47_A 1nbp_A 2b5i_A 3ink_C 3ink_D 5utz_A 5utz_D 5utz_E 5utz_I 1m4c_A 1m4c_B 1z92_A 2erj_D 2erj_H 3qb1_A 3qb1_B 3qb1_C 3qb1_E 3qb1_F 3qb1_H 3qaz_A 3qaz_D 3qaz_G 3qaz_J 3qaz_M 3qaz_P 3qaz_S 3qaz_V 3qaz_Y 3qaz_b 3qaz_e 3qaz_h 1irl_A
 2ot1_D,3dfq_A 3dfq_B 3dfq_C 3dfq_D 5f4x_A 5f4x_B 5f4x_C 5f4x_D 3dfn_A 3dfn_B 3dfn_C 3dfn_D 1zah_A 1zah_B 1zah_C 1zah_D 3dft_D 1ado_C 1ado_D 2ot0_A 2ot0_B 2ot0_C 2ot0_D 3dfp_D 3b8d_A 3b8d_B 3b8d_C 3b8d_D 2ald_A 3lge_A 3lge_B 3lge_C 3lge_D 1ald_A 1ex5_A 1ex5_B 1ex5_C 1ex5_D 1ewd_A 1ewd_B 1ewd_C 1ewd_D 1ewe_A 1ewe_B 1ewe_C 1ewe_D 6ald_C 6ald_D 6v20_A 6v20_B
 1za1_D,1d09_B 1d09_D 2air_B 2air_H 2qgf_B 2qgf_D 4wto_B 4wto_D 1f1b_B 1f1b_D 1nbe_B 1nbe_D 1tu0_B 1tu0_D 1i5o_D 1r0c_B 1r0c_H 1xjw_B 1xjw_D 1tth_B 1tth_D 1ezz_B 1ezz_D 2qg9_B 2qg9_D 1q95_G 1q95_H 1q95_I 1q95_J 1q95_K 1q95_L 3d7s_B 3d7s_D 2ipo_B 2ipo_D 1r0b_G 1r0b_H 1r0b_I 1r0b_J 1r0b_K 1r0b_L
 1yv3_A,2aka_A 1vom_A 1lvk_A 1d0y_A 1d0x_A 3myl_X 1d0z_A 1d1b_A 4pjk_A 1fmv_A 1mmg_A 1mmn_A 1d1a_A 1fmw_A 1mma_A 1d1c_A 2xo8_A 2jj9_A 2xel_A 2x9h_A 2jhr_A 2y0r_X 2y8i_X 2y9e_X 1mne_A 1mnd_A 1mmd_A
@@ -73,7 +73,7 @@ holoid_chain,apoid_chain
 3bl7_A,3bl9_B 3bl7_B
 2iuz_B,1w9p_A 1w9p_B 1wno_A 1wno_B
 3fqk_B,1gx5_A 4eo6_A 4eo6_B 4eo8_A 4eo8_B 3frz_A 3cj2_A 3cj2_B 2d3z_A 2d3z_B 2xhv_A 3ciz_A 3ciz_B 1gx6_A 3cj0_A 3cj0_B 4jju_A 4jju_B 2wcx_A 2gir_A 2gir_B 2wrm_A 5czb_A 5czb_B 1c2p_A 1c2p_B 3cj5_A 3cj5_B 3cj3_A 3cj3_B 3mf5_A 3mf5_B 2zku_A 2zku_B 2zku_C 2zku_D 4j02_A 4j02_B 1nb4_A 1nb4_B 4j04_A 4j04_B 4j06_A 4j06_B 2d3u_A 2d3u_B 4dru_A 2who_A 2who_B 1nhu_A
-3bqm_C,1mjn_A 3f74_A 3f74_B 3f74_C 1lfa_A 1lfa_B 1zon_A 1zop_A 1zop_B 3bn3_A 3hi6_A 3hi6_B 3eoa_I 3eoa_J 3tcx_B 3tcx_D 3tcx_F 3tcx_H 3tcx_J 3tcx_L 3tcx_N 3tcx_P 3tcx_R 3tcx_T 3tcx_V 3tcx_X 3tcx_Z 1zoo_A 1zoo_B 1mq8_B 1mq8_D 3eob_I 3eob_J 1dgq_A
+3bqm_C,1mjn_A 3f74_A 3f74_B 3f74_C 1lfa_A 1lfa_B 1zon_A 1zop_A 1zop_B 3bn3_A 3hi6_A 3hi6_B 3eoa_I 3eoa_J 3tcx_B 3tcx_D 3tcx_F 3tcx_H 3tcx_J 3tcx_L 3tcx_N 3tcx_P 3tcx_R 3tcx_T 3tcx_V 3tcx_X 3tcx_Z 3tcx_b 1zoo_A 1zoo_B 1mq8_B 1mq8_D 3eob_I 3eob_J 1dgq_A
 2yxj_A,3fdl_A 2yq7_A 5vx3_A 5vx3_C 5vx3_E 5vx3_G 3r85_A 3r85_B 3r85_C 3r85_D 4z9v_A 4z9v_B 3fdm_C 5b1z_A 5b1z_B 2yj1_C 6dco_A 6dco_B 3io8_A 3io8_C 6dcn_A 6dcn_B 4a1w_B 4a1w_D 5c3g_A 2p1l_A 2p1l_C 2p1l_E 2p1l_G 4cin_A 4cin_B
 2wcg_A,3gxi_A 3gxi_B 3gxi_C 3gxi_D 1ogs_B 2nt1_A 2nt1_B 2nt1_C 2nt1_D 3rik_A 3rik_C 3gxm_A 3gxm_B 3gxm_C 3gxm_D 2f61_A 2f61_B 3ke0_A 2wkl_A 2wkl_B 3gxd_A 3gxd_B 3gxd_C 3gxd_D 3keh_A 2j25_A 2j25_B
 3h9j_D,3h5r_C 3h5r_D 3h9q_A 3h9q_C 3h9q_D 3h5a_A 3h5a_B 3h5a_C 3h5a_D

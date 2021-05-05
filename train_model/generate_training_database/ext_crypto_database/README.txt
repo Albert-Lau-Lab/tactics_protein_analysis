@@ -6,7 +6,11 @@ the beginning.
 ##### How to extend the CryptoSite database using this GitHub Repository     #####
 ##### (Recommended because it is faster than the alternative below)          #####
 
-* Run the Python script download_pdbs_from_csv.py.
+* The Jupyter notebook train_model/ml/retrain_model.ipynb downloads the
+  extended-database proteins.  So although users reconstructing the database
+  will need to run scripts to download the original CryptoSite database proteins,
+  the extended database proteins are downloaded automatically when training
+  the model.
 
 
 
