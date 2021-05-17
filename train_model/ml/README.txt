@@ -10,6 +10,16 @@ following files are noteworthy:
 * retrain_model.ipynb: This code retrains the model from the reconstructed
   database.  As part of this procedure, it downloads each extended-database
   protein that was used in the TACTICS database.
+    * WARNING: Due to the stochasticity of ML and the many factors that
+      might affect results (e.g. dependency versions, order of entries in
+      training database, etc.), it is NOT guaranteed that a retrained model
+      will be exactly the same as the original model.  Thus is is NOT
+      recommended for most users to
+      retrain the model.  If there are any differences between the retrained
+      model and the original model, this could impact the reproducibility
+      of results.  Users are STRONGLY encouraged to use an officially released
+      version of the TACTICS ML model, in order to ensure that other labs can
+      reproduce the results.
 * get_tactics_db.py: parses train_model.ipynb to get a list of proteins
   included in the training database.
 * extended_database_prots.csv: This file lists all the extended-database

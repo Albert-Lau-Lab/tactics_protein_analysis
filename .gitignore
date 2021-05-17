@@ -8,6 +8,7 @@ train_model/generate_training_database/ext_crypto_database/__pycache__
 train_model/ml/train_set_conc
 train_model/ml/__pycache__
 train_model/retrained_jupyter_dill.db
+train_model/ml/.ipynb_checkpoints
 run_model/__pycache__
 run_model/input_data/*
 !run_model/input_data/.gitkeep
