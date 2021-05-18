@@ -15,3 +15,5 @@ run_model/input_data/*
 run_model/output_data/*
 !run_model/output_data/.gitkeep
 *.swp
+core
+vmd*.tar.gz
