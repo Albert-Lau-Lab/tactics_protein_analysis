@@ -1,8 +1,33 @@
 # TACTICS Pocket Finder Code
 This code finds the locations of possible cryptic pockets within MD trajectories.
 
-## Requirements
+## Installing TACTICS
+TACTICS has many dependencies.  There are two ways to install them:
+
+1. Run a script that automatically installs everything into a Docker container.  This README is designed to include enough information that someone unfamiliar with Docker can run TACTICS this way.
+
+2. Install each depencency manually.
+
+#### Installing TACTICS Using Docker
+* Install Docker.  On Ubuntu, `apt-get` is an easy way to get Docker: `sudo apt-get install Docker`.
+* Clone the TACTICS GitHub repository: ` git clone https://github.com/Albert-Lau-Lab/tactics_protein_analysis.git`
+* Download a tar.gz file of VMD.  The file will probably be named something like `vmd-1.9.3.bin.LINUXAMD64.text.tar.gz`.  Copy the VMD file into the `tactics_protein_analysis` directory that you cloned from GitHub.
+* `cd` into `tactics_protein_analysis`.  Run the following command: `sudo docker build --no-cache .`.  It might take several minutes to run.
+* Run the following command: `sudo docker images`.  You should see a Docker image listed whose `REPOSITORY` is `<none>` and `SIZE` is approximately 2.4GB.  Copy the image's `IMAGE ID`.
+* Paste the `IMAGE ID` into this command: ` sudo docker run -v $(pwd):/tactics_docker_dir/tactics_protein_analysis -it <IMAGE_ID>`.  For example: ` sudo docker run -v $(pwd):/tactics_docker_dir/tactics_protein_analysis -it ef423c81aa8f`
+* You will now be inside the Docker container.  It functions similarly to a virtual machine.  The container's filesystem is different from the host computer's filesystem; files created by the container aren't visible from the rest of the host computer (and vice versa).  The exception to this is that the container and the host share the `tactics_protein_analysis` directory.  Anything inside this directory can be edited by both the container and the host machine.
+* Run TACTICS while inside the container.  NOTE: your input MD data must be inside `tactics_protein_analysis` in order to be seen by the container.  The recommended location is `tactics_protein_analysis/run_model/input_data`.
+* To exit the container, press Control D or type `exit`.
+* To restart the container: first type `sudo docker container ls -a` to list the containers.  Copy the container ID (not the image ID).  Then type `sudo docker start -i <container id>` where `<container_id>` is replaced with the correct value.
+* WARNING: Creating many Docker images/containers can quickly use up memory.  To delete them:
+    * `sudo docker container ls -a` to get the container IDs.
+    * `sudo docker rm <container id>` to delete the containers.
+    * `sudo docker images` to get the image IDs.
+    * `sudo docker rmi <image id>` to delete the images.
+
+#### Installing TACTICS Without Docker
 Running TACTICS requires that the following be installed:
+
 * The MDAnalysis python package.  Can be installed using `pip install --upgrade MDAnalysis` or (if you have conda) `conda config --add channels conda-forge && conda install mdanalysis && conda update mdanalysis`.  See https://www.mdanalysis.org/pages/installation_quick_start/.
 * The scikit-learn python package, version 0.21.2.  Can be installed using `pip install scikit-learn==0.21.2`.  See https://scikit-learn.org/stable/install.html, but make sure to install the correct version!  The latest version of scikit-learn will not work with TACTICS.
 * The pandas python package.  Can be installed using `pip install pandas`.  See https://pandas.pydata.org/docs/getting_started/install.html.
@@ -10,6 +35,7 @@ Running TACTICS requires that the following be installed:
 * ConCavity must be installed so that it can be run using the command `concavity`.  See https://compbio.cs.princeton.edu/concavity/; download and compile the source code.  Then add something like `export PATH=/path/to/concavity/bin/x86_64/:$PATH` to your `.bashrc`.
 * VMD must be installed so that it can be run using the command `vmd`.  See http://www.ks.uiuc.edu/Research/vmd/.
 * PyMOL must be installed.  For info on open-source versions of PyMOL, see https://pymolwiki.org/index.php/Linux_Install and https://github.com/schrodinger/pymol-open-source.  Installing using a package manager ex. `apt-get` might be easier than installing from source.  Alternatively, see https://pymol.org/2/ for info on the proprietary version of PyMOL.
+* OpenBabel must be installed.  See http://openbabel.org/wiki/Category:Installation.  Ubuntu users can use `apt-get`.
 * MGLTools must be installed.  See https://ccsb.scripps.edu/mgltools/.  WARNING: As of February 25, 2021, MGLTools doesn't work on Mac OS Catalina or newer.  Use a virtual machine or a different computer.
 * The file `get_dock_score.py` must be modified so that `mgltools_loc`, `pythonsh_loc`, and `prepare_receptor_loc` stores the locations of the MGLTools software.
 
