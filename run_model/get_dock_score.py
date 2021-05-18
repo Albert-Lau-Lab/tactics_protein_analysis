@@ -9,7 +9,7 @@ from get_list_of_segids import get_list_of_segids
 
 ### WARNING: The values of mgltools_loc, pythonsh_loc, and prepare_receptor4_loc
 # must be set to the correct values before running TACTICS.
-mgltools_loc = "~/MGLTools-1.5.6/"
+mgltools_loc = "/mgltools_x86_64Linux2_1.5.7"
 pythonsh_loc = "%s/bin/pythonsh" %(mgltools_loc)
 prepare_receptor4_loc = "%s/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_receptor4.py" %(mgltools_loc)
 
