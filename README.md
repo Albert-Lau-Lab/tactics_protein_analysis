@@ -2,79 +2,77 @@
 This code finds the locations of possible cryptic pockets within MD trajectories.
 
 ## Installing TACTICS
-TACTICS has many dependencies.  There are two ways to install them:
+One of TACTICS's dependencies cannot be installed on Mac OS &#8805; Catalina.  (See [here](https://ccsb.scripps.edu/mgltools/) for details.)  Therefore we recommend installing TACTICS on Linux.
 
-1. Run a script that automatically installs everything into a Docker container.  This README is designed to include enough information that someone unfamiliar with Docker can run TACTICS this way.
+TACTICS is strict about which versions of Python packages are used.  We recommend installing in a Python virtual environment so the rest of the computer is unaffected.
 
-2. Install each depencency manually.
+### Standard Installation Instructions
 
-#### Installing TACTICS Using Docker
-* Install Docker.  On Ubuntu, `apt-get` is an easy way to get Docker: `sudo apt-get install Docker`.
-* Clone the TACTICS GitHub repository: ` git clone https://github.com/Albert-Lau-Lab/tactics_protein_analysis.git`
-* Download a tar.gz file of VMD.  The file will probably be named something like `vmd-1.9.3.bin.LINUXAMD64.text.tar.gz`.  Copy the VMD file into the `tactics_protein_analysis` directory that you cloned from GitHub.
-* `cd` into `tactics_protein_analysis`.  Run the following command: `sudo docker build --no-cache .`.  It might take several minutes to run.
-* Run the following command: `sudo docker images`.  You should see a Docker image listed whose `REPOSITORY` is `<none>` and `SIZE` is approximately 2.4GB.  Copy the image's `IMAGE ID`.
-* Paste the `IMAGE ID` into this command: ` sudo docker run -v $(pwd):/tactics_docker_dir/tactics_protein_analysis -it <IMAGE_ID>`.  For example: ` sudo docker run -v $(pwd):/tactics_docker_dir/tactics_protein_analysis -it ef423c81aa8f`
-* You will now be inside the Docker container.  It functions similarly to a virtual machine.  The container's filesystem is different from the host computer's filesystem; files created by the container aren't visible from the rest of the host computer (and vice versa).  The exception to this is that the container and the host share the `tactics_protein_analysis` directory.  Anything inside this directory can be edited by both the container and the host machine.
-* Run TACTICS while inside the container.  NOTE: your input MD data must be inside `tactics_protein_analysis` in order to be seen by the container.  The recommended location is `tactics_protein_analysis/run_model/input_data`.
-* To exit the container, press Control D or type `exit`.
-* To restart the container: first type `sudo docker container ls -a` to list the containers.  Copy the container ID (not the image ID).  Then type `sudo docker start -i <container id>` where `<container_id>` is replaced with the correct value.
-* WARNING: Creating many Docker images/containers can quickly use up memory.  To delete them:
-    * `sudo docker container ls -a` to get the container IDs.
-    * `sudo docker rm <container id>` to delete the containers.
-    * `sudo docker images` to get the image IDs.
-    * `sudo docker rmi <image id>` to delete the images.
+Install pyenv using [these instructions](https://brain2life.hashnode.dev/how-to-install-pyenv-python-version-manager-on-ubuntu-2004).
 
-#### Installing TACTICS Without Docker
-Running TACTICS requires that the following be installed:
+Download TACTICS with the command`git clone https://github.com/Albert-Lau-Lab/tactics_protein_analysis.git`.  Use `cd` to enter the directory `tactics_protein_analysis`.  Within this directory, run the following commands:
 
-* The MDAnalysis python package.  Can be installed using `pip install --upgrade MDAnalysis` or (if you have conda) `conda config --add channels conda-forge && conda install mdanalysis && conda update mdanalysis`.  See https://www.mdanalysis.org/pages/installation_quick_start/.
-* The scikit-learn python package, version 0.21.2.  Can be installed using `pip install scikit-learn==0.21.2`.  See https://scikit-learn.org/stable/install.html, but make sure to install the correct version!  The latest version of scikit-learn will not work with TACTICS.
-* The pandas python package.  Can be installed using `pip install pandas`.  See https://pandas.pydata.org/docs/getting_started/install.html.
-* Autodock Vina must be installed so that it can be run using the command `vina`.  See http://vina.scripps.edu/.  Adding a command like `export PATH=/path/to/vina/bin/:$PATH` to your `.bashrc` file should work (after downloading Vina).
-* ConCavity must be installed so that it can be run using the command `concavity`.  See https://compbio.cs.princeton.edu/concavity/; download and compile the source code.  Then add something like `export PATH=/path/to/concavity/bin/x86_64/:$PATH` to your `.bashrc`.
-* VMD must be installed so that it can be run using the command `vmd`.  See http://www.ks.uiuc.edu/Research/vmd/.
-* PyMOL must be installed.  For info on open-source versions of PyMOL, see https://pymolwiki.org/index.php/Linux_Install and https://github.com/schrodinger/pymol-open-source.  Installing using a package manager ex. `apt-get` might be easier than installing from source.  Alternatively, see https://pymol.org/2/ for info on the proprietary version of PyMOL.
-* OpenBabel must be installed.  See http://openbabel.org/wiki/Category:Installation.  Ubuntu users can use `apt-get`.
-* MGLTools must be installed.  See https://ccsb.scripps.edu/mgltools/.  WARNING: As of February 25, 2021, MGLTools doesn't work on Mac OS Catalina or newer.  Use a virtual machine or a different computer.
-* The file `get_dock_score.py` must be modified so that `mgltools_loc`, `pythonsh_loc`, and `prepare_receptor_loc` stores the locations of the MGLTools software.
+    pyenv install 3.8.16
+    pyenv local 3.8.16
+    
+Check that when you type the command `python` within the TACTICS directory, you get version 3.8.16.  (You should still get the default Python when outside the TACTICS directory.)
+
+**While in the TACTICS directory,** run the following:
+    
+    sudo apt-get install openbabel
+    sudo apt-get install autodock-vina
+    sudo apt-get install concavity
+    sudo apt-get install pymol
+    
+    pip install cython
+    pip install numpy==1.19.5
+    pip install scikit-learn==0.21.2
+    pip install mdanalysis==2.2.0
+    pip install pandas==1.4.4
+    
+Download the latest version of MGLTools from [here](https://ccsb.scripps.edu/mgltools/downloads/).  After downloading MGLTools, run `./install.sh` to install it.  See MGLTools README for more info.
+
+Install VMD so it can be run using by typing `vmd` into the terminal.
+    
+Modify the TACTICS file `get_dock_score.py` so that `mgltools_loc`, `pythonsh_loc`, and `prepare_receptor_loc` store the locations of the MGLTools software.
+
+
+### Alternative Installation Using Docker
+See the appendix [here](#appendix).
+
 
 ## Usage
-#### Locations of the Code
-The directory `train_model` includes the code that was used to train the ML model.  It is expected that most software users will not need to run the code in this directory.
+#### Location of the Code
 
-The directory `run_model` contains the code to run the model.   ***Users should run the code while `run_model` is the working directory.***
-
-**Warning: the MD trajectory should be aligned to itself, so that the center of mass remains constant.  This matters because TACTICS finds the change in residue positions; motion of the entire protein would bias this.**
+Users should run TACTICS while `run_model` is the working directory.
 
 #### How to Run the Code
 
-The algorithm is expected to be used through the function `tactics`.  See
-`run_model/run_tactics.py` for an example.  Calling the function
-`tactics` will run the pocket-finding algorithm and store the results
-wherever `output_dir` is.
+**Warning: the MD trajectory should be aligned to itself, so that the center of mass remains constant.  This matters because TACTICS finds the change in residue positions; motion of the entire protein would bias this.**
 
-Here is the order of arguments to 'tactics`:
+TACTICS is run by calling a Python function.  Running TACTICS will usually require the following:
 
-```
-tactics(output_dir, apo_pdb_loc, psf_loc=None, dcd_loc=None, universe=None,
-        num_clusters=None, alt_clustering_method=None, ml_score_thresh=0.8,
-        ml_std_thresh=0.25, dock_extra_space=8, clust_max_dist=11)
-```
-Here is an explanation of each argument.  Note that either `universe` or both `psf_loc` and `dcd_loc` must be specified.
-
- * `output_dir` : string.  The name of the directory where the output is stored.  If the directory already exists, its contents will be overwritten.
- * `apo_pdb_loc` : string.  The path to the PDB file of the "apo" structure before MD has started.  This is compared with the frames from the MD trajectory.
- * `psf_loc` : string, optional.  The path to the MD trajectory's PSF file.   If `psf_loc` is `None`, then `dcd_loc` must be `None` and `universe` must not be `None`.
- * `dcd_loc` : string, optional.  The path to the MD trajectory's DCD file.  If `dcd_loc` is `None`, then `psf_loc` must be `None` and `universe` must not be `None`.
- * `universe` : MDAnalysis universe, optional.  An MDAnlysis universe with the protein conformational ensemble (ex. aligned MD trajectory).  If `universe` is `None`, then `psf_loc` and `dcd_loc` must not be `None`.  The code re-opens the file(s) in the universe.  So when the universe is initialized, the file paths must be specific enough that the code can find the files from the `tactics` function call.  Additionally, the universe's input structures must have segids of the form PROA, PROB, etc. where A,B act as the chain label.
- * `num_clusters` : int.  The number of k-means clusters to create.  Either `num_clusters` or `alt_clustering_method` must be `None`.
- * alt_clustering_method : MDAnalysis ClusteringMethod object.  An algorithm used to be used to cluster the trajectory.  If `alt_clustering_method` is `None`, then k-means will be used.  Either `alt_clustering_method` or `num_clusters` must be `None`.
- * `ml_score_thresh` : float, optional.  The ML confidence score threshold for determining if a residue is "high-scoring".  It must be between 0 and 1.  The default value is 0.8
- * `ml_std_thresh` : float, optional.  The algorithm ignores residues that have high ML confidence scores in all frames.  It does this by ignoring residues for which the standard deviation of the confidence scores among MD snapshots is less than ml_std_thresh.  This number must be between 0 and 1.  The default value is 0.25.
- * `dock_extra_space` : float, optional.  The space (in Angstroms) added to each side of the predicted site when determining the region to perform docking in.  The default value is 8.  This value is not expected to need changing from system to system; the default value is recommended.
- * `clust_max_dist` : float, optional.  The distance threshold (in Angstroms) to determine if a residue with a high ML score should be included in a cluster of other high-scoring residues.  The default value is 11.  This value is not expected to need changing from system to system; the default value is recommended.
- 
+* `output_dir`: the name of the directory where the output will be stored.
+* `apo_pdb_loc`: the location of the "apo" structure before MD has started. This is compared with the frames from the MD trajectory.
+* `universe` : an MDAnalysis Universe object containing the MD data.  See the example below for how to create this.
+* `num_clusters`: how many frames of the MD trajectory should be selected by TACTICS for analysis.  We recommend starting with 8 and trying a few values until you get reasonable-looking results.  Values of roughly 3-15 are reasonable.
+* `ml_score_thresh`: the ML confidence score threshold for determining if a residue is "high-scoring".  The default value is 0.8.  You might need to try a few values to get reasonable output.  Values between 0.5 and 0.9 should work for most systems, but anything between 0 and 1 is allowed.
+* `ml_std_thresh`: the algorithm ignores residues that have high ML confidence scores in all frames.  It does this by ignoring residues for which the standard deviation of the confidence scores among MD snapshots is less than `ml_std_thresh`.  The default value is 0.25.  Values between 0.05 and 0.4 are suggested, but anything between 0 and 1 is allowed.
+            
+##### Example Usage
+    import MDAnalysis as mda
+    from tactics import tactics
+    
+    output_dir = "test_output"
+    apo_pdb_loc = "/data/sample_first_frame.pdb"
+    psf_loc = "/data/sample.psf"
+    dcd_locs = ["/data/sample1.dcd", "/data/sample2.dcd"]
+    u = mda.Universe(psf_loc, dcd_list)
+    
+    tactics(output_dir, apo_pdb_loc, universe=u, num_clusters=8,
+            ml_score_thresh=0.8, ml_std_thresh=0.25)
+    
+Additional options are discussed in the [appendix](#appendix). 
  
 #### What Files Are Created?
  
@@ -110,3 +108,47 @@ If the code predicts numerous pockets but each pocket only has one residue, then
 If the code predicts no pockets, then `ml_score_thresh` and `ml_std_thresh` may be too high.
 
 If the code gives the error message `KeyError: '1:A'`, then the apo structure's residue and chain nomenclature may not match the nomenclature used in the trajectory.
+
+## <a name="appendix"></a> Appendix
+### Alternative Installation Using Docker
+* Install Docker.  On Ubuntu, `apt-get` is an easy way to get Docker: `sudo apt-get install Docker`.
+* Clone the TACTICS GitHub repository: ` git clone https://github.com/Albert-Lau-Lab/tactics_protein_analysis.git`
+* Download a tar.gz file of VMD.  The file will probably be named something like `vmd-1.9.3.bin.LINUXAMD64.text.tar.gz`.  Copy the VMD file into the `tactics_protein_analysis` directory that you cloned from GitHub.
+* `cd` into `tactics_protein_analysis`.  Run the following command: `sudo docker build --no-cache .`.  It might take several minutes to run.
+* Run the following command: `sudo docker images`.  You should see a Docker image listed whose `REPOSITORY` is `<none>` and `SIZE` is approximately 2.4GB.  Copy the image's `IMAGE ID`.
+* Paste the `IMAGE ID` into this command: ` sudo docker run -v $(pwd):/tactics_docker_dir/tactics_protein_analysis -it <IMAGE_ID>`.  For example: ` sudo docker run -v $(pwd):/tactics_docker_dir/tactics_protein_analysis -it ef423c81aa8f`
+* You will now be inside the Docker container.  It functions similarly to a virtual machine.  The container's filesystem is different from the host computer's filesystem; files created by the container aren't visible from the rest of the host computer (and vice versa).  The exception to this is that the container and the host share the `tactics_protein_analysis` directory.  Anything inside this directory can be edited by both the container and the host machine.
+* Run TACTICS while inside the container.  NOTE: your input MD data must be inside `tactics_protein_analysis` in order to be seen by the container.  The recommended location is `tactics_protein_analysis/run_model/input_data`.
+* To exit the container, press Control D or type `exit`.
+* To restart the container: first type `sudo docker container ls -a` to list the containers.  Copy the container ID (not the image ID).  Then type `sudo docker start -i <container id>` where `<container_id>` is replaced with the correct value.
+* WARNING: Creating many Docker images/containers can quickly use up memory.  To delete them:
+    * `sudo docker container ls -a` to get the container IDs.
+    * `sudo docker rm <container id>` to delete the containers.
+    * `sudo docker images` to get the image IDs.
+    * `sudo docker rmi <image id>` to delete the images.
+
+### Additional Options For TACTICS
+Here is a full list of possible arguments to TACTICS:
+
+```
+tactics(output_dir, apo_pdb_loc, psf_loc=None, dcd_loc=None, universe=None,
+        num_clusters=None, alt_clustering_method=None, ml_score_thresh=0.8,
+        ml_std_thresh=0.25, dock_extra_space=8, clust_max_dist=11)
+```
+Here is an explanation of the arguments not discussed above:
+
+ * `psf_loc` and `dcd_loc` : string, optional.  Instead of passing an MDAnalysis Universe, users can pass the locations of a psf and a dcd file.  To do this, both `psf_loc` and `dcd_loc` must be given and `universe` must be `None`.
+ * `alt_clustering_method` : MDAnalysis ClusteringMethod object.  An algorithm used to be used to cluster the trajectory.  If `alt_clustering_method` is `None`, then k-means will be used.  Either `alt_clustering_method` or `num_clusters` must be `None`.
+ * `dock_extra_space` : float, optional.  The space (in Angstroms) added to each side of the predicted site when determining the region to perform docking in.  The default value is 8.  This value is not expected to need changing from system to system; the default value is recommended.
+ * `clust_max_dist` : float, optional.  The distance threshold (in Angstroms) to determine if a residue with a high ML score should be included in a cluster of other high-scoring residues.  The default value is 11.  This value is not expected to need changing from system to system; the default value is recommended.
+
+##### Example Using PSF/DCD Instead of Universe
+    from tactics import tactics
+    
+    output_dir = "test_output"
+    apo_pdb_loc = "/data/sample_first_frame.pdb"
+    psf_loc = "/data/sample.psf"
+    dcd_loc = "/data/sample.dcd"
+    
+    tactics(output_dir, apo_pdb_loc, psf_loc=psf_loc, dcd_loc=dcd_loc,
+            num_clusters=8, ml_score_thresh=0.8, ml_std_thresh=0.25)
