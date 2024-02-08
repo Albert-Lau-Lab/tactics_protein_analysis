@@ -1,21 +1,22 @@
 apt-get update
 apt-get install -y python3-pip
 pip install Cython --install-option="--no-cython-compile"
+pip install numpy==1.19.5
 pip install scikit-learn==0.21.2
-pip3 install pandas
-pip install mdanalysis
+pip install mdanalysis==2.2.0
+pip install pandas==1.4.4
 
 apt-get install -y openbabel
 
 mkdir /software_installation
 cd /software_installation
 apt-get install -y wget
-wget http://vina.scripps.edu/download/autodock_vina_1_1_2_linux_x86.tgz
+wget https://vina.scripps.edu/wp-content/uploads/sites/55/2020/12/autodock_vina_1_1_2_linux_x86.tgz
 tar xzvf autodock_vina_1_1_2_linux_x86.tgz
 echo 'export PATH=/software_installation/autodock_vina_1_1_2_linux_x86/bin/:$PATH' >> ~/.bashrc
 
-mv /tactics_docker_dir/vmd-*.tar.gz .
-tar -xzvf vmd-*.tar.gz
+mv /tactics_docker_dir/vmd-*.tar* .
+tar -xvf vmd-*.tar*
 cd vmd-*
 ./configure
 cd src/
@@ -23,16 +24,7 @@ apt-get install -y make
 make install
 cd ../..
 
-wget https://compbio.cs.princeton.edu/concavity/concavity_distr.tar.gz
-tar -xzvf concavity_distr.tar.gz
-cd concavity_distr
-apt-get install -y gcc
-apt-get install -y g++
-apt-get install -y freeglut3-dev
-apt-get install -y libxxf86vm-dev
-make clean; make
-echo 'export PATH=/software_installation/concavity_distr/bin/x86_64/:$PATH' >> ~/.bashrc
-cd ..
+apt-get install concavity
 
 wget https://ccsb.scripps.edu/download/532/
 tar -xzvf index.html

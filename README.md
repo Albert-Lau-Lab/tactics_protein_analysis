@@ -113,7 +113,7 @@ If the code gives the error message `KeyError: '1:A'`, then the apo structure's 
 ### Alternative Installation Using Docker
 * Install Docker.  On Ubuntu, `apt-get` is an easy way to get Docker: `sudo apt-get install Docker`.
 * Clone the TACTICS GitHub repository: ` git clone https://github.com/Albert-Lau-Lab/tactics_protein_analysis.git`
-* Download a tar.gz file of VMD.  The file will probably be named something like `vmd-1.9.3.bin.LINUXAMD64.text.tar.gz`.  Copy the VMD file into the `tactics_protein_analysis` directory that you cloned from GitHub.
+* Download a tar file of the text-only VMD.  The file should be named `vmd-1.9.3.bin.LINUXAMD64.text.tar`.  Copy the VMD file into the `tactics_protein_analysis` directory that you cloned from GitHub.
 * `cd` into `tactics_protein_analysis`.  Run the following command: `sudo docker build --no-cache .`.  It might take several minutes to run.
 * Run the following command: `sudo docker images`.  You should see a Docker image listed whose `REPOSITORY` is `<none>` and `SIZE` is approximately 2.4GB.  Copy the image's `IMAGE ID`.
 * Paste the `IMAGE ID` into this command: ` sudo docker run -v $(pwd):/tactics_docker_dir/tactics_protein_analysis -it <IMAGE_ID>`.  For example: ` sudo docker run -v $(pwd):/tactics_docker_dir/tactics_protein_analysis -it ef423c81aa8f`
